@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf8f5">
+  <title>Bettergram — a little color nonogram</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <section class="level-screen" id="level-screen" aria-labelledby="welcome-title">
+      <header class="topbar">
+        <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
+      </header>
+      <section class="welcome">
+        <span class="welcome-kicker">A little color puzzle</span>
+        <h1 id="welcome-title">Make something lovely.</h1>
+        <p>Follow the clues, fill in the colors, and uncover a tiny picture one square at a time.</p>
+      </section>
+      <section class="gallery-heading">
+        <h2>Choose your picture</h2>
+        <p>Beat each picture to unlock the next one. You can replay any picture you have unlocked.</p>
+      </section>
+      <nav class="level-gallery" id="level-gallery" aria-label="Choose a level"></nav>
+    </section>
+
+    <section class="game-screen" id="game-screen" hidden>
+      <header class="topbar game-topbar">
+        <button class="back-button" id="level-menu-button" type="button">← All pictures</button>
+        <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
+      </header>
+
+      <section class="heading" aria-live="polite">
+        <div>
+          <h1 id="level-title" tabindex="-1">A little love</h1>
+          <p class="subtitle" id="level-subtitle">A pink pixel heart, just for you.</p>
+        </div>
+        <div class="progress" id="progress">0 / 64</div>
+      </section>
+
+      <section class="puzzle-key" id="puzzle-key" aria-label="Puzzle information">
+        <span class="puzzle-size" id="puzzle-size"></span>
+        <div class="color-legend" id="color-legend" aria-label="Puzzle colors"></div>
+      </section>
+
+      <section class="game-area" aria-label="Nonogram puzzle">
+        <div class="board-shell" id="board-shell">
+          <div class="board-layout" id="board-layout">
+            <div class="corner" aria-hidden="true"></div>
+            <div class="column-clues" id="column-clues" aria-label="Column clues"></div>
+            <div class="row-clues" id="row-clues" aria-label="Row clues"></div>
+            <div class="board" id="board" role="grid" aria-label="Puzzle cells"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Game controls">
+        <div class="palette-row" id="palette" aria-label="Choose fill color"></div>
+        <div class="action-row">
+          <button class="tool-button mode" id="mode-button" type="button" aria-pressed="false">● Fill</button>
+          <button class="tool-button" id="undo-button" type="button">↶ Undo</button>
+          <button class="tool-button hint" id="hint-button" type="button">✦ Hint (3/3)</button>
+        </div>
+        <p class="help">Different colors can touch · same colors need a gap</p>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="win-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="win-title">
+    <div class="modal">
+      <div class="modal-emoji" aria-hidden="true">✨</div>
+      <h2 id="win-title">Lovely work!</h2>
+      <p id="win-copy">You found the picture.</p>
+      <div class="painting-preview" id="painting-preview" role="img" aria-label="Your finished painting"></div>
+      <div class="result-actions">
+        <button class="view-button" id="view-painting-button" type="button">See painting</button>
+        <button class="next-button" id="next-button" type="button">Next Level</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="levels.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
