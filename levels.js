@@ -3,372 +3,383 @@ const picture = (...rows) => rows.map(row => Array.from(row, Number));
 window.levels = [
   {
     name: "A little love",
-    subtitle: "Fill the twin lobes and taper to the point to reveal a heart.",
+    subtitle: "Outline the symmetric red heart and catch the two-pixel shine on its top-left lobe.",
     colors: [
-      { name: "Blush pink", hex: "#efb3bf", clueInk: "#71414c" },
-      { name: "Berry red", hex: "#d67583", clueInk: "#fffaf8" }
+      { name: "Cocoa outline", hex: "#4a3338", clueInk: "#fffaf8" },
+      { name: "Ruby red", hex: "#de5260", clueInk: "#fffaf8" },
+      { name: "Soft shine", hex: "#f7d4dc", clueInk: "#71414c" }
     ],
     solution: picture(
-      "001110011100",
-      "011111111110",
-      "111111111111",
-      "111222222111",
-      "112222222211",
-      "012222222210",
-      "001222222100",
-      "000122221000",
-      "000012210000",
-      "000001100000",
-      "000000000000",
-      "000000000000"
+      "01100110",
+      "13322221",
+      "12222221",
+      "12222221",
+      "01222210",
+      "00122100",
+      "00011000",
+      "00011000"
     )
   },
   {
-    name: "Sleepy kitty",
-    subtitle: "Find the ginger face, pointed ears, bright eyes, and whiskers.",
+    name: "Cute kitty",
+    subtitle: "Trace the pointed ears, pink inner ears and nose, and clear bright eyes.",
     colors: [
-      { name: "Ginger", hex: "#dc9869", clueInk: "#583625" },
-      { name: "Cream", hex: "#f3d9ac", clueInk: "#594832" },
-      { name: "Cocoa", hex: "#67565a", clueInk: "#fffaf8" }
+      { name: "Charcoal", hex: "#43393e", clueInk: "#fffaf8" },
+      { name: "Ginger", hex: "#e79b60", clueInk: "#54321c" },
+      { name: "Blush pink", hex: "#f0a3b3", clueInk: "#663641" }
     ],
-    solution: [
-      [0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0],
-      [0, 0, 0, 3, 1, 1, 1, 1, 3, 0, 0, 0],
-      [0, 0, 3, 3, 1, 1, 1, 1, 3, 3, 0, 0],
-      [0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-      [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3],
-      [3, 1, 1, 1, 3, 1, 1, 3, 1, 1, 1, 3],
-      [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3],
-      [3, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 3],
-      [3, 1, 1, 1, 2, 3, 3, 2, 1, 1, 1, 3],
-      [3, 3, 3, 1, 2, 2, 2, 2, 1, 3, 3, 3],
-      [0, 3, 3, 1, 1, 1, 1, 1, 1, 3, 3, 0],
-      [0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0]
-    ]
+    solution: picture(
+      "0100000010",
+      "1210000121",
+      "1331001331",
+      "1221111221",
+      "1222222221",
+      "1212222121",
+      "1122222211",
+      "1222332221",
+      "1221221221",
+      "0111111110"
+    )
+  },
+  {
+    name: "Watermelon slice",
+    subtitle: "Reveal the crisp green rind, thin white layer, juicy red flesh, and three black seeds.",
+    colors: [
+      { name: "Watermelon red", hex: "#df5863", clueInk: "#fffaf8" },
+      { name: "Rind cream", hex: "#e8ebd8", clueInk: "#434c3a" },
+      { name: "Rind green", hex: "#548c54", clueInk: "#fffaf8" },
+      { name: "Seed black", hex: "#383436", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000011000",
+      "0000111100",
+      "0001111110",
+      "0011114110",
+      "0111411110",
+      "0111111410",
+      "1111111111",
+      "1111111111",
+      "2222222222",
+      "3333333333"
+    )
+  },
+  {
+    name: "Steaming mug",
+    subtitle: "Warm terracotta mug with a right handle and two wavy steam curls rising above.",
+    colors: [
+      { name: "Terracotta", hex: "#c8795b", clueInk: "#fffaf8" },
+      { name: "Espresso", hex: "#4d3630", clueInk: "#fffaf8" },
+      { name: "Warm steam", hex: "#a9bcc7", clueInk: "#34444d" }
+    ],
+    solution: picture(
+      "3000300000",
+      "0300030000",
+      "3000300000",
+      "0300030000",
+      "0011111000",
+      "0122221110",
+      "0111111011",
+      "0111111011",
+      "0111111110",
+      "0011111000"
+    )
   },
   {
     name: "Sunny sunflower",
-    subtitle: "Follow the gold petals around the warm brown center.",
+    subtitle: "Bright golden petals surround a warm brown center and a little green stem.",
     colors: [
-      { name: "Sunshine", hex: "#efb94d", clueInk: "#62491d" },
+      { name: "Sunshine gold", hex: "#efb94d", clueInk: "#62491d" },
       { name: "Honey brown", hex: "#8b5a3c", clueInk: "#fffaf8" },
       { name: "Leaf green", hex: "#658b5a", clueInk: "#fffaf8" }
     ],
     solution: picture(
-      "000001100000",
-      "000011110000",
-      "000111111000",
-      "001111111100",
-      "011112211110",
-      "111122221111",
-      "011112211110",
-      "001111111100",
-      "000011110000",
-      "000003300000",
-      "000033330000",
-      "003330333000"
+      "0001111000",
+      "0011111100",
+      "0111221110",
+      "1112222111",
+      "1122222211",
+      "1122222211",
+      "1112222111",
+      "0111221110",
+      "0011331100",
+      "0000330000"
     )
   },
   {
     name: "Little fish",
-    subtitle: "Find the fish swimming through its blue waves.",
+    subtitle: "A colorful fish with a striped body and a bright eye swims through the water.",
     colors: [
       { name: "Coral", hex: "#ed987c", clueInk: "#633b31" },
-      { name: "Lagoon", hex: "#6ca9b5", clueInk: "#183f48" },
-      { name: "Deep blue", hex: "#344d66", clueInk: "#fffaf8" }
+      { name: "Lagoon blue", hex: "#6ca9b5", clueInk: "#183f48" },
+      { name: "Cream stripe", hex: "#f3d9ac", clueInk: "#594832" },
+      { name: "Deep ink", hex: "#34404d", clueInk: "#fffaf8" }
     ],
     solution: picture(
-      "000000000000",
-      "000000000000",
-      "001100000000",
-      "011110000000",
-      "001111111100",
-      "000112222110",
-      "000112222310",
-      "000112222110",
-      "001111111100",
-      "011110000000",
-      "001100000000",
-      "000000000000"
+      "0000011000",
+      "0000111100",
+      "0001111110",
+      "1101111111",
+      "1111223411",
+      "1111222111",
+      "1101111111",
+      "0001111110",
+      "0000111100",
+      "0000011000"
     )
   },
   {
-    name: "Toadstool",
-    subtitle: "A spotted red cap is hiding a tiny woodland mushroom.",
+    name: "Red toadstool",
+    subtitle: "A little forest mushroom with cream spots and a sturdy stem.",
     colors: [
-      { name: "Poppy", hex: "#d86e68", clueInk: "#fffaf8" },
-      { name: "Oat", hex: "#dfc49a", clueInk: "#514333" }
+      { name: "Poppy red", hex: "#d86e68", clueInk: "#fffaf8" },
+      { name: "Cream spots", hex: "#f3e7d2", clueInk: "#514333" },
+      { name: "Oat stem", hex: "#dfc49a", clueInk: "#514333" }
     ],
     solution: picture(
-      "000001100000",
-      "000011110000",
-      "001111111100",
-      "011211211110",
-      "111111111111",
-      "112111112111",
-      "111111111111",
-      "000111111000",
-      "000122221000",
-      "000122221000",
-      "000122221000",
-      "000011110000"
+      "0001111000",
+      "0011111100",
+      "0112112110",
+      "1121111211",
+      "1111111111",
+      "0112112110",
+      "0001111000",
+      "0003333000",
+      "0003333000",
+      "0003333000"
     )
   },
   {
     name: "Wise little owl",
-    subtitle: "A few more clues to untangle on this nighttime visitor.",
-    hard: true,
+    subtitle: "A chestnut owl with bright amber eyes and tiny feet.",
     colors: [
       { name: "Chestnut", hex: "#795044", clueInk: "#fffaf8" },
       { name: "Feather cream", hex: "#e9d8b8", clueInk: "#514333" },
-      { name: "Amber", hex: "#d99a45", clueInk: "#4e3515" }
+      { name: "Amber", hex: "#d99a45", clueInk: "#4e3515" },
+      { name: "Pupil dark", hex: "#34323a", clueInk: "#fffaf8" }
     ],
     solution: picture(
-      "000110011000",
-      "001111111100",
-      "011122221110",
-      "112233223311",
-      "112313132211",
-      "112233223311",
-      "112222222211",
-      "112222322211",
-      "011222222110",
-      "001122221100",
-      "000111111000",
-      "000033330000"
+      "0110000110",
+      "1111111111",
+      "1122112211",
+      "1123413211",
+      "1111111111",
+      "0111221110",
+      "0011221100",
+      "0011221100",
+      "0111111110",
+      "0033003300"
     )
   },
   {
-    name: "Sail away",
-    subtitle: "Piece together a bright sailboat gliding over calm water.",
-    colors: [
-      { name: "Sea blue", hex: "#71aabd", clueInk: "#173d48" },
-      { name: "Sail red", hex: "#d97870", clueInk: "#fffaf8" },
-      { name: "Sail cream", hex: "#f0d7a4", clueInk: "#594832" },
-      { name: "Wood", hex: "#87614c", clueInk: "#fffaf8" }
-    ],
-    solution: picture(
-      "000004000000",
-      "000024300000",
-      "000224330000",
-      "002224333000",
-      "022224333300",
-      "000004000000",
-      "000004000000",
-      "000004000000",
-      "000004000000",
-      "000444444000",
-      "111111111111",
-      "001010101000"
-    )
-  },
-  {
-    name: "Butterfly garden",
-    subtitle: "Match the colorful wings around the butterfly's golden body.",
-    colors: [
-      { name: "Teal", hex: "#63a99b", clueInk: "#173f38" },
-      { name: "Peach", hex: "#e6a18a", clueInk: "#573b32" },
-      { name: "Marigold", hex: "#e5bd59", clueInk: "#554317" }
-    ],
-    solution: picture(
-      "000003300000",
-      "000013310000",
-      "000113311000",
-      "001223322100",
-      "012223322210",
-      "122223322221",
-      "122223322221",
-      "012223322210",
-      "001223322100",
-      "000223322000",
-      "000133310000",
-      "000003300000"
-    )
-  },
-  {
-    name: "Moonlit castle",
-    subtitle: "Hard: watch the little towers, windows, and doorway carefully.",
-    hard: true,
-    colors: [
-      { name: "Stone", hex: "#8791a2", clueInk: "#fffaf8" },
-      { name: "Night blue", hex: "#546d91", clueInk: "#fffaf8" },
-      { name: "Flag gold", hex: "#e2b95e", clueInk: "#594717" }
-    ],
-    solution: picture(
-      "300000000003",
-      "300000000003",
-      "111011011011",
-      "111011011011",
-      "111111111111",
-      "111111111111",
-      "111111111111",
-      "111111111111",
-      "112111211211",
-      "111111111111",
-      "111111211111",
-      "111111211111"
-    )
-  },
-  {
-    name: "Fox in the leaves",
-    subtitle: "Look for a pointy-eared fox with a cream-colored muzzle.",
-    colors: [
-      { name: "Fox orange", hex: "#d98555", clueInk: "#55351f" },
-      { name: "Muzzle cream", hex: "#f0dfc0", clueInk: "#594832" },
-      { name: "Deep brown", hex: "#674944", clueInk: "#fffaf8" }
-    ],
-    solution: picture(
-      "100000000001",
-      "110000000011",
-      "112000000211",
-      "111100001111",
-      "111111111111",
-      "111311113111",
-      "111222222111",
-      "112222222211",
-      "012222222210",
-      "001122221100",
-      "000123321000",
-      "000011110000"
-    )
-  },
-  {
-    name: "Penguin parade",
-    subtitle: "A little penguin is ready for a chilly stroll.",
-    colors: [
-      { name: "Ink", hex: "#45505c", clueInk: "#fffaf8" },
-      { name: "Snow", hex: "#f0e9da", clueInk: "#514747" },
-      { name: "Tangerine", hex: "#e5a14f", clueInk: "#563b1c" }
-    ],
-    solution: picture(
-      "000011110000",
-      "000111111000",
-      "001122221100",
-      "011212212110",
-      "011222222110",
-      "011223322110",
-      "111222222111",
-      "111222222111",
-      "011222222110",
-      "001222221100",
-      "000300003000",
-      "000330033000"
-    )
-  },
-  {
-    name: "Ladybug",
-    subtitle: "Spot the little beetle's dark head and dotted red wings.",
-    colors: [
-      { name: "Midnight", hex: "#41454e", clueInk: "#fffaf8" },
-      { name: "Poppy red", hex: "#df6f70", clueInk: "#572b2c" }
-    ],
-    solution: picture(
-      "000100001000",
-      "000111111000",
-      "001122221100",
-      "011222222110",
-      "112122221211",
-      "112212212211",
-      "112122221211",
-      "011222222110",
-      "001111111100",
-      "001010010100",
-      "000000000000",
-      "000000000000"
-    )
-  },
-  {
-    name: "Up, up, and away",
-    subtitle: "Follow the striped balloon down to its little basket.",
+    name: "Hot air balloon",
+    subtitle: "A striped balloon floats high above its little basket.",
     colors: [
       { name: "Berry", hex: "#cf7182", clueInk: "#fffaf8" },
       { name: "Apricot", hex: "#efbd70", clueInk: "#5c421d" },
-      { name: "Basket", hex: "#87614c", clueInk: "#fffaf8" }
+      { name: "Basket brown", hex: "#87614c", clueInk: "#fffaf8" }
     ],
     solution: picture(
-      "000001100000",
-      "000111111000",
-      "001122221100",
-      "011122222110",
-      "011222222110",
-      "011122222110",
-      "001122221100",
-      "000111111000",
-      "000001100000",
-      "000001100000",
-      "000033330000",
-      "000033330000"
+      "0001111000",
+      "0011221100",
+      "0111222110",
+      "1111222211",
+      "1111222211",
+      "0111222110",
+      "0011221100",
+      "0000110000",
+      "0003330000",
+      "0003330000"
     )
   },
   {
-    name: "Berry cupcake",
-    subtitle: "Find the cherry on top and the soft cake below the frosting.",
+    name: "Tiny tulip",
+    subtitle: "A spring tulip opens above two green leaves and a slender stem.",
     colors: [
-      { name: "Strawberry frosting", hex: "#e69aa7", clueInk: "#583b42" },
-      { name: "Vanilla cake", hex: "#e6c99b", clueInk: "#55452e" },
-      { name: "Cherry", hex: "#b84f5b", clueInk: "#fffaf8" }
+      { name: "Tulip coral", hex: "#e78383", clueInk: "#5a3435" },
+      { name: "Leaf green", hex: "#6c9b69", clueInk: "#fffaf8" },
+      { name: "Stem green", hex: "#4f7f58", clueInk: "#fffaf8" }
     ],
     solution: picture(
-      "000003300000",
-      "000333330000",
-      "000111110000",
-      "001111111100",
-      "011111111110",
-      "111111111111",
-      "011111111110",
-      "001222222100",
-      "001222222100",
-      "001212212100",
-      "000222222000",
-      "000000000000"
+      "0001100000",
+      "0011110000",
+      "0111111000",
+      "0111111000",
+      "0011110000",
+      "0003300000",
+      "0003330000",
+      "0012331000",
+      "0113331100",
+      "0003330000"
     )
   },
   {
-    name: "Sunset peaks",
-    subtitle: "Hard: trace the overlapping mountain ridges beneath the setting sun.",
+    name: "Moonlit window",
+    subtitle: "A glowing moon, two stars, and a quiet blue window wait after sunset.",
     hard: true,
     colors: [
-      { name: "Indigo peaks", hex: "#69739a", clueInk: "#fffaf8" },
-      { name: "Golden sun", hex: "#e7b45b", clueInk: "#574216" },
-      { name: "Dusk ridge", hex: "#83917c", clueInk: "#28352a" }
+      { name: "Midnight blue", hex: "#3e506f", clueInk: "#fffaf8" },
+      { name: "Moon gold", hex: "#f3c968", clueInk: "#5b4617" },
+      { name: "Star cream", hex: "#f8e8b5", clueInk: "#5b4e2c" },
+      { name: "Window glow", hex: "#9cc8c2", clueInk: "#254845" }
     ],
     solution: picture(
-      "000000000000",
-      "000002200000",
-      "000022220000",
-      "000022220000",
-      "000000000000",
-      "000001000000",
-      "000011100000",
-      "000111311000",
-      "001113331100",
-      "011133333110",
-      "111133333111",
-      "333333333333"
+      "0000030000",
+      "0010001000",
+      "0000110000",
+      "0011221000",
+      "0112221100",
+      "0122222100",
+      "0112221100",
+      "0011111000",
+      "0011441000",
+      "0011441000"
     )
   },
   {
-    name: "Garden turtle",
-    subtitle: "A gentle turtle peeks out from its patterned green shell.",
+    name: "Cozy teapot",
+    subtitle: "A round berry teapot with a golden lid, handle, and a little steam curl.",
     colors: [
-      { name: "Moss", hex: "#688264", clueInk: "#fffaf8" },
-      { name: "Fern", hex: "#a6b887", clueInk: "#35412b" },
-      { name: "Sand", hex: "#d1a96c", clueInk: "#51402a" },
-      { name: "Deep green", hex: "#40583f", clueInk: "#fffaf8" }
+      { name: "Berry glaze", hex: "#b96778", clueInk: "#fffaf8" },
+      { name: "Cream ceramic", hex: "#f2dfc3", clueInk: "#5d4b3b" },
+      { name: "Golden lid", hex: "#e3ad55", clueInk: "#5e4217" },
+      { name: "Steam gray", hex: "#a7bcc1", clueInk: "#34464b" }
+    ],
+    solution: picture(
+      "0000400000",
+      "0003330000",
+      "0013331000",
+      "0011111100",
+      "0111221111",
+      "0111221111",
+      "0111111011",
+      "0011110011",
+      "0011110000",
+      "0001100000"
+    )
+  },
+  {
+    name: "Garden snail",
+    subtitle: "A patient little snail carries a striped shell through a patch of leaves.",
+    hard: true,
+    colors: [
+      { name: "Moss green", hex: "#71966b", clueInk: "#fffaf8" },
+      { name: "Shell peach", hex: "#e29a78", clueInk: "#633d30" },
+      { name: "Shell spiral", hex: "#9c5d54", clueInk: "#fffaf8" },
+      { name: "Garden cream", hex: "#e7d5a3", clueInk: "#51452a" }
     ],
     solution: picture(
       "000000000000",
-      "000000001100",
-      "000000011410",
-      "000011111110",
-      "000122221110",
-      "001212221111",
-      "001222221111",
-      "000111111111",
-      "000300030300",
-      "000330033300",
+      "000011110000",
+      "000122211000",
+      "001122221100",
+      "011122222110",
+      "011122321110",
+      "011122233110",
+      "001111111100",
+      "000111111100",
+      "000011141110",
+      "000001100110",
+      "000001100000"
+    )
+  },
+  {
+    name: "Sleepy fox",
+    subtitle: "A curled-up russet fox tucks its tail around a warm cream muzzle.",
+    colors: [
+      { name: "Russet fur", hex: "#c86f52", clueInk: "#fffaf8" },
+      { name: "Night brown", hex: "#543d3b", clueInk: "#fffaf8" },
+      { name: "Cream muzzle", hex: "#f0d7ae", clueInk: "#594832" },
+      { name: "Leaf shadow", hex: "#73856a", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
       "000000000000",
+      "000011000000",
+      "000111100000",
+      "001111110000",
+      "011122111100",
+      "011123211110",
+      "011133222110",
+      "001111122110",
+      "000111111100",
+      "000011111110",
+      "000001144100",
+      "000000110000"
+    )
+  },
+  {
+    name: "Rainy umbrella",
+    subtitle: "A bright umbrella catches the rain while three tiny drops fall below it.",
+    hard: true,
+    colors: [
+      { name: "Umbrella coral", hex: "#df7772", clueInk: "#fffaf8" },
+      { name: "Umbrella gold", hex: "#efbd5f", clueInk: "#5d461d" },
+      { name: "Rain blue", hex: "#6da6b6", clueInk: "#fffaf8" },
+      { name: "Handle brown", hex: "#765447", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000000000000",
+      "000011000000",
+      "000111100000",
+      "001122110000",
+      "011122221100",
+      "111122222111",
+      "111122222111",
+      "000031000000",
+      "000034000000",
+      "001003001000",
+      "001003001000",
       "000000000000"
+    )
+  },
+  {
+    name: "Book nook",
+    subtitle: "A stack of colorful books hides a tiny plant and a soft reading lamp.",
+    colors: [
+      { name: "Plum book", hex: "#86658f", clueInk: "#fffaf8" },
+      { name: "Mustard book", hex: "#d5a64f", clueInk: "#554017" },
+      { name: "Teal book", hex: "#5c9c9b", clueInk: "#fffaf8" },
+      { name: "Plant green", hex: "#70935d", clueInk: "#fffaf8" },
+      { name: "Lamp cream", hex: "#f1d692", clueInk: "#5d4a1d" }
+    ],
+    solution: picture(
+      "000005000000",
+      "000000440000",
+      "000004400000",
+      "000044400000",
+      "001111111100",
+      "022222222220",
+      "033333333330",
+      "001111111100",
+      "022222222220",
+      "033333333330",
+      "000111111110",
+      "000000000000"
+    )
+  },
+  {
+    name: "Lighthouse bay",
+    subtitle: "A striped lighthouse shines over a little boat and rolling evening waves.",
+    hard: true,
+    colors: [
+      { name: "Sea blue", hex: "#5b91a1", clueInk: "#fffaf8" },
+      { name: "Lighthouse cream", hex: "#f0d8a6", clueInk: "#5b4824" },
+      { name: "Beacon gold", hex: "#efb95b", clueInk: "#5b4217" },
+      { name: "Roof red", hex: "#c96862", clueInk: "#fffaf8" },
+      { name: "Night ink", hex: "#3f5069", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000000300000",
+      "000003330000",
+      "000033333050",
+      "000011110000",
+      "000022220000",
+      "000011110000",
+      "000022220000",
+      "000011110000",
+      "001111111100",
+      "011111111110",
+      "111144441111",
+      "111111111111"
     )
   }
 ];
