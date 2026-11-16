@@ -381,5 +381,281 @@ window.levels = [
       "111144441111",
       "111111111111"
     )
+  },
+  {
+    name: "Autumn maple",
+    subtitle: "Golden and russet leaves gather around the sturdy trunk of a little maple tree.",
+    colors: [
+      { name: "Maple gold", hex: "#e8ad55", clueInk: "#5d421c" },
+      { name: "Leaf amber", hex: "#d77b4d", clueInk: "#fffaf8" },
+      { name: "Russet red", hex: "#b9574e", clueInk: "#fffaf8" },
+      { name: "Bark brown", hex: "#765044", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000000110000",
+      "000001221000",
+      "000012221100",
+      "000122221210",
+      "001222222210",
+      "012222222210",
+      "001222222100",
+      "000122221000",
+      "000011110000",
+      "000033300000",
+      "000033300000",
+      "000033300000"
+    )
+  },
+  {
+    name: "Hot cocoa",
+    subtitle: "A warm mug of cocoa is topped with cream and a tiny marshmallow star.",
+    colors: [
+      { name: "Cocoa", hex: "#8b5a49", clueInk: "#fffaf8" },
+      { name: "Mug cream", hex: "#ecd9bd", clueInk: "#514333" },
+      { name: "Marshmallow", hex: "#fff4df", clueInk: "#594b39" },
+      { name: "Steam blue", hex: "#9bbdc3", clueInk: "#31474b" }
+    ],
+    solution: picture(
+      "000000040000",
+      "000004040000",
+      "000000400000",
+      "000222220000",
+      "001111111100",
+      "011111111110",
+      "011111111111",
+      "011111111111",
+      "011111111110",
+      "001111111100",
+      "000011110000",
+      "000000000000"
+    )
+  },
+  {
+    name: "Dragonfly pond",
+    subtitle: "A bright dragonfly hovers over reeds, with four translucent wings and a long tail.",
+    hard: true,
+    colors: [
+      { name: "Dragonfly teal", hex: "#448e8b", clueInk: "#fffaf8" },
+      { name: "Wing aqua", hex: "#a6d9d0", clueInk: "#294b47" },
+      { name: "Wing lilac", hex: "#c5b0d8", clueInk: "#493957" },
+      { name: "Pond green", hex: "#71966b", clueInk: "#fffaf8" },
+      { name: "Water blue", hex: "#6a9eb0", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000000000000",
+      "001100001100",
+      "011210012110",
+      "001110011100",
+      "000011110000",
+      "000012100000",
+      "000001100000",
+      "000001100000",
+      "000001200000",
+      "440004400044",
+      "444444444444",
+      "555555555555"
+    )
+  },
+  {
+    name: "Pine in the snow",
+    subtitle: "A small evergreen stands beneath a snowy cap with a bright star at its tip.",
+    colors: [
+      { name: "Pine green", hex: "#4f8065", clueInk: "#fffaf8" },
+      { name: "Snow white", hex: "#f2f0e8", clueInk: "#4c4b45" },
+      { name: "Tree trunk", hex: "#8b634b", clueInk: "#fffaf8" },
+      { name: "Star gold", hex: "#efc35e", clueInk: "#5b4518" }
+    ],
+    solution: picture(
+      "000004000000",
+      "000033300000",
+      "000012100000",
+      "000112110000",
+      "001111121000",
+      "011121111100",
+      "000111110000",
+      "001111111000",
+      "011111111100",
+      "000022220000",
+      "000022220000",
+      "222222222222"
+    )
+  },
+  {
+    name: "Carousel horse",
+    subtitle: "A painted carousel horse prances beneath a striped canopy and golden finial.",
+    hard: true,
+    colors: [
+      { name: "Canopy red", hex: "#cc6f70", clueInk: "#fffaf8" },
+      { name: "Canopy gold", hex: "#edbd62", clueInk: "#594116" },
+      { name: "Horse ivory", hex: "#f0dfc3", clueInk: "#514333" },
+      { name: "Saddle blue", hex: "#648fa4", clueInk: "#fffaf8" },
+      { name: "Pole brass", hex: "#b88b48", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000005000000",
+      "000011100000",
+      "001122110000",
+      "011221221100",
+      "111211211110",
+      "001111111000",
+      "000123310000",
+      "000222211000",
+      "000222221100",
+      "000202020000",
+      "000202020000",
+      "000000000000"
+    )
+  },
+  {
+    name: "Desert cactus",
+    subtitle: "A flowering cactus grows beside a little stone under the hot desert sun.",
+    colors: [
+      { name: "Cactus green", hex: "#5d9471", clueInk: "#fffaf8" },
+      { name: "Flower pink", hex: "#df8291", clueInk: "#57313a" },
+      { name: "Desert sand", hex: "#e6bd78", clueInk: "#59451f" },
+      { name: "Stone gray", hex: "#8d9691", clueInk: "#333b37" }
+    ],
+    solution: picture(
+      "000000000000",
+      "000000220000",
+      "000000200000",
+      "000020200000",
+      "000021200000",
+      "000011100000",
+      "000011100000",
+      "000111110000",
+      "000111110000",
+      "000111110000",
+      "002223300000",
+      "222222222222"
+    )
+  },
+  {
+    name: "Moon rabbit",
+    subtitle: "A curious rabbit sits on a crescent moon among two tiny stars.",
+    hard: true,
+    colors: [
+      { name: "Moon silver", hex: "#d8d8ca", clueInk: "#4c4c45" },
+      { name: "Rabbit cream", hex: "#f2e5cc", clueInk: "#594b39" },
+      { name: "Ear pink", hex: "#d98e9a", clueInk: "#553039" },
+      { name: "Night navy", hex: "#495979", clueInk: "#fffaf8" },
+      { name: "Star gold", hex: "#efc35e", clueInk: "#5b4518" }
+    ],
+    solution: picture(
+      "000050000500",
+      "000000000000",
+      "000001001000",
+      "000011101100",
+      "000012101100",
+      "000011111000",
+      "000001111100",
+      "000011111000",
+      "000111110000",
+      "001110000000",
+      "000000000000",
+      "000000000000"
+    )
+  },
+  {
+    name: "Sailboat sunset",
+    subtitle: "A little sailboat glides across calm water as the sun sinks toward the horizon.",
+    colors: [
+      { name: "Sail cream", hex: "#f3e5c7", clueInk: "#594b39" },
+      { name: "Hull coral", hex: "#d97867", clueInk: "#fffaf8" },
+      { name: "Sea teal", hex: "#568f9a", clueInk: "#fffaf8" },
+      { name: "Sun gold", hex: "#edbd62", clueInk: "#594116" }
+    ],
+    solution: picture(
+      "000000000000",
+      "000000044000",
+      "000000444000",
+      "000000444000",
+      "000000040000",
+      "000011040000",
+      "000111040000",
+      "000111140000",
+      "000022220000",
+      "000333333000",
+      "033333333330",
+      "333333333333"
+    )
+  },
+  {
+    name: "Coral reef",
+    subtitle: "A striped tropical fish explores branching coral and swaying sea plants.",
+    hard: true,
+    colors: [
+      { name: "Reef coral", hex: "#df796e", clueInk: "#fffaf8" },
+      { name: "Sea grass", hex: "#619477", clueInk: "#fffaf8" },
+      { name: "Fish gold", hex: "#e8b653", clueInk: "#594116" },
+      { name: "Fish stripe", hex: "#f4e5c4", clueInk: "#594b39" },
+      { name: "Deep water", hex: "#557b9a", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000000000000",
+      "000020000000",
+      "000222000000",
+      "022223200000",
+      "222332220000",
+      "022223200000",
+      "000020000000",
+      "100010001000",
+      "110011011100",
+      "111011011110",
+      "555555555555",
+      "555555555555"
+    )
+  },
+  {
+    name: "Birthday cake",
+    subtitle: "A frosted layer cake glows with three candles and colorful little sprinkles.",
+    colors: [
+      { name: "Cake pink", hex: "#dc8c91", clueInk: "#54353a" },
+      { name: "Vanilla icing", hex: "#f4e5c8", clueInk: "#594b39" },
+      { name: "Berry sprinkle", hex: "#a65b78", clueInk: "#fffaf8" },
+      { name: "Candle blue", hex: "#6d9fb2", clueInk: "#fffaf8" },
+      { name: "Flame gold", hex: "#efb953", clueInk: "#594116" }
+    ],
+    solution: picture(
+      "000050500500",
+      "000040400400",
+      "000000000000",
+      "001111111100",
+      "012121212210",
+      "011111111110",
+      "022222222220",
+      "012121212210",
+      "011111111110",
+      "001111111100",
+      "000011110000",
+      "000000000000"
+    )
+  },
+  {
+    name: "Rocket to the stars",
+    subtitle: "A bright little rocket leaves a trail of flame on its way to a distant star.",
+    hard: true,
+    colors: [
+      { name: "Rocket silver", hex: "#d9dfdf", clueInk: "#424949" },
+      { name: "Rocket red", hex: "#d86d67", clueInk: "#fffaf8" },
+      { name: "Window blue", hex: "#72a9bc", clueInk: "#244752" },
+      { name: "Flame gold", hex: "#efbd5d", clueInk: "#594116" },
+      { name: "Flame coral", hex: "#e78367", clueInk: "#58362d" },
+      { name: "Star cream", hex: "#f4e7bf", clueInk: "#594b2b" }
+    ],
+    solution: picture(
+      "000000000000",
+      "000000000600",
+      "000000060000",
+      "000000200000",
+      "000001100000",
+      "000011110000",
+      "000112211000",
+      "000011110000",
+      "000011110000",
+      "000042400000",
+      "000044400000",
+      "000005500000"
+    )
   }
 ];

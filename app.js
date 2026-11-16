@@ -44,14 +44,23 @@
   const boardShell = document.getElementById("board-shell");
   const layout = document.getElementById("board-layout");
   const levelGallery = document.getElementById("level-gallery");
+  const startScreen = document.getElementById("start-screen");
+  const feedbackScreen = document.getElementById("feedback-screen");
   const levelScreen = document.getElementById("level-screen");
   const gameScreen = document.getElementById("game-screen");
   const levelMenuButton = document.getElementById("level-menu-button");
+  const startMenuButton = document.getElementById("start-menu-button");
+  const playButton = document.getElementById("play-button");
+  const levelsButton = document.getElementById("levels-button");
+  const feedbackButton = document.getElementById("feedback-button");
+  const feedbackHomeButton = document.getElementById("feedback-home-button");
+  const feedbackForm = document.getElementById("feedback-form");
+  const feedbackStatus = document.getElementById("feedback-status");
+  const currentLevelNumber = document.getElementById("current-level-number");
   const rowClues = document.getElementById("row-clues");
   const columnClues = document.getElementById("column-clues");
   const palette = document.getElementById("palette");
   const levelTitle = document.getElementById("level-title");
-  const levelSubtitle = document.getElementById("level-subtitle");
   const progress = document.getElementById("progress");
   const puzzleSize = document.getElementById("puzzle-size");
   const colorLegend = document.getElementById("color-legend");
@@ -96,6 +105,7 @@
   function selectLevel(index) {
     if (!Number.isInteger(index) || index < 0 || index > unlockedLevel || index >= levels.length) return;
     levelIndex = index;
+    currentLevelNumber.textContent = String(levelIndex + 1);
     selectedColor = 1;
     crossMode = false;
     saveLevel();
@@ -107,11 +117,34 @@
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
     gameScreen.hidden = true;
+    startScreen.hidden = true;
+    feedbackScreen.hidden = true;
     levelScreen.hidden = false;
-    levelGallery.querySelectorAll(".level-card")[levelIndex].focus();
+    levelGallery.querySelectorAll(".level-card")[levelIndex]?.focus();
+  }
+
+  function showStartScreen() {
+    window.clearTimeout(winModalTimer);
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    gameScreen.hidden = true;
+    levelScreen.hidden = true;
+    feedbackScreen.hidden = true;
+    startScreen.hidden = false;
+    playButton.focus();
+  }
+
+  function showFeedbackScreen() {
+    startScreen.hidden = true;
+    levelScreen.hidden = true;
+    gameScreen.hidden = true;
+    feedbackScreen.hidden = false;
+    feedbackForm.querySelector("textarea").focus();
   }
 
   function showGameScreen() {
+    startScreen.hidden = true;
+    feedbackScreen.hidden = true;
     levelScreen.hidden = true;
     gameScreen.hidden = false;
     render();
@@ -127,13 +160,22 @@
       const locked = index > unlockedLevel;
       button.disabled = locked;
       button.setAttribute("aria-label", `Level ${index + 1}: ${level.name}${level.hard ? ", hard level" : ""}${locked ? `, locked until level ${index} is complete` : ""}`);
+      const preview = document.createElement("span");
+      preview.className = "level-preview";
+      preview.style.setProperty("--size", String(level.solution.length));
+      preview.setAttribute("aria-hidden", "true");
+      level.solution.forEach(row => row.forEach(value => {
+        const pixel = document.createElement("span");
+        if (value > 0) pixel.style.setProperty("--fill", level.colors[value - 1].hex);
+        preview.append(pixel);
+      }));
       const number = document.createElement("span");
       number.className = "card-number";
       number.textContent = String(index + 1).padStart(2, "0");
       const title = document.createElement("span");
       title.className = "card-title";
       title.textContent = level.name;
-      button.append(number, title);
+      button.append(preview, number, title);
       button.addEventListener("click", () => {
         if (index > unlockedLevel) return;
         selectLevel(index);
@@ -215,7 +257,6 @@
     rowClues.style.setProperty("--size", n);
     columnClues.style.setProperty("--size", n);
     levelTitle.textContent = level.name;
-    levelSubtitle.textContent = level.subtitle;
     const filledCells = level.solution.flat().filter(value => value > 0).length;
     puzzleSize.textContent = `${n} × ${n} · ${filledCells} cells`;
     colorLegend.innerHTML = "";
@@ -475,6 +516,15 @@
   }
 
   levelMenuButton.addEventListener("click", showLevelScreen);
+  startMenuButton.addEventListener("click", showStartScreen);
+  levelsButton.addEventListener("click", showLevelScreen);
+  feedbackButton.addEventListener("click", showFeedbackScreen);
+  feedbackHomeButton.addEventListener("click", showStartScreen);
+  feedbackForm.addEventListener("submit", event => {
+    event.preventDefault();
+    feedbackStatus.textContent = "Feedback delivery is not configured yet.";
+  });
+  playButton.addEventListener("click", () => showGameScreen());
 
   viewPaintingButton.addEventListener("click", () => {
     modal.classList.remove("open");
@@ -488,5 +538,6 @@
   });
 
   buildLevelGallery();
+  currentLevelNumber.textContent = String(levelIndex + 1);
   render();
 })();
