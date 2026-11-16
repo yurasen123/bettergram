@@ -21,42 +21,43 @@
 <body>
   <main class="app">
     <section class="start-screen" id="start-screen" aria-labelledby="start-title">
-      <header class="topbar"><div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div></header>
+      <header class="topbar"><div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div><button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button></header>
       <section class="welcome start-welcome">
-        <span class="welcome-kicker">A little color puzzle</span>
-        <h1 id="start-title">Make something lovely.</h1>
-        <p>Follow the clues, fill in the colors, and uncover a tiny picture one square at a time.</p>
+        <span class="welcome-kicker" data-i18n="ui.startKicker">A little color puzzle</span>
+        <h1 id="start-title" data-i18n="ui.startTitle">Make something lovely.</h1>
+        <p data-i18n="ui.startDesc">Follow the clues, fill in the colors, and uncover a tiny picture one square at a time.</p>
       </section>
-      <nav class="start-actions" aria-label="Main menu">
-        <button class="start-button primary" id="play-button" type="button">Play level <span id="current-level-number">1</span></button>
-        <button class="start-button" id="levels-button" type="button">Levels</button>
-        <button class="start-button" id="how-to-play-button" type="button">How to play</button>
-        <button class="start-button" id="install-button" type="button" hidden>Install app</button>
-        <button class="start-button" id="feedback-button" type="button">Feedback</button>
+      <nav class="start-actions" aria-label="Main menu" data-i18n-attr="aria-label:ui.mainMenu">
+        <button class="start-button primary" id="play-button" type="button"><span data-i18n="ui.playLevel">Play level</span> <span id="current-level-number">1</span></button>
+        <button class="start-button" id="levels-button" type="button" data-i18n="ui.levels">Levels</button>
+        <button class="start-button" id="how-to-play-button" type="button" data-i18n="ui.howToPlay">How to play</button>
+        <button class="start-button" id="install-button" type="button" data-i18n="ui.installApp" hidden>Install app</button>
+        <button class="start-button" id="feedback-button" type="button" data-i18n="ui.feedback">Feedback</button>
       </nav>
     </section>
 
     <section class="how-to-screen" id="how-to-screen" aria-labelledby="how-to-title" hidden>
       <header class="topbar">
-        <button class="back-button" id="how-to-home-button" type="button">← Home</button>
+        <button class="back-button" id="how-to-home-button" type="button" data-i18n="ui.home">← Home</button>
         <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
+        <button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button>
       </header>
       <section class="welcome how-to-welcome">
-        <span class="welcome-kicker">A little color puzzle</span>
-        <h1 id="how-to-title" tabindex="-1">How to play</h1>
-        <p>Use the clues to fill the board and reveal the hidden picture.</p>
+        <span class="welcome-kicker" data-i18n="ui.startKicker">A little color puzzle</span>
+        <h1 id="how-to-title" tabindex="-1" data-i18n="ui.howToTitle">How to play</h1>
+        <p data-i18n="ui.howToDesc">Use the clues to fill the board and reveal the hidden picture.</p>
       </section>
       <ol class="how-to-steps">
         <li>
           <div class="step-copy">
-            <h2>Read the clues</h2>
-            <p>Each number gives the length of a same-color run. Read row clues left to right and column clues top to bottom.</p>
+            <h2 data-i18n="ui.howToStep1Title">Read the clues</h2>
+            <p data-i18n="ui.howToStep1Desc">Each number gives the length of a same-color run. Read row clues left to right and column clues top to bottom.</p>
           </div>
           <figure class="how-to-visual clue-visual">
             <div class="clue-example" aria-hidden="true">
               <div class="clue-sequence">
-                <span class="clue-token blue-clue"><b>3</b><small>blue</small></span>
-                <span class="clue-token coral-clue"><b>2</b><small>coral</small></span>
+                <span class="clue-token blue-clue"><b>3</b><small data-i18n="ui.howToBlue">blue</small></span>
+                <span class="clue-token coral-clue"><b>2</b><small data-i18n="ui.howToCoral">coral</small></span>
               </div>
               <span class="demo-arrow">→</span>
               <div class="example-cells" aria-hidden="true">
@@ -64,13 +65,13 @@
                 <span class="coral-run"></span><span class="coral-run"></span>
               </div>
             </div>
-            <figcaption>3 blue squares, then 2 coral squares</figcaption>
+            <figcaption data-i18n="ui.howToStep1Figcaption">3 blue squares, then 2 coral squares</figcaption>
           </figure>
         </li>
         <li>
           <div class="step-copy">
-            <h2>Mind the color gaps</h2>
-            <p>Different colors may touch. Matching colors need at least one empty square between runs.</p>
+            <h2 data-i18n="ui.howToStep2Title">Mind the color gaps</h2>
+            <p data-i18n="ui.howToStep2Desc">Different colors may touch. Matching colors need at least one empty square between runs.</p>
           </div>
           <figure class="how-to-visual rule-visual">
             <div class="rule-example" aria-hidden="true">
@@ -78,7 +79,7 @@
                 <span class="blue-run"></span><span class="blue-run"></span>
                 <span class="coral-run"></span><span class="coral-run"></span>
               </div>
-              <span class="rule-caption"><b>✓</b> Different colors touch</span>
+              <span class="rule-caption"><b>✓</b> <span data-i18n="ui.howToTouch">Different colors touch</span></span>
             </div>
             <div class="rule-example" aria-hidden="true">
               <div class="example-cells">
@@ -86,27 +87,27 @@
                 <span class="empty-run">×</span>
                 <span class="blue-run"></span><span class="blue-run"></span>
               </div>
-              <span class="rule-caption"><b>✓</b> Same color needs a gap</span>
+              <span class="rule-caption"><b>✓</b> <span data-i18n="ui.howToGap">Same color needs a gap</span></span>
             </div>
-            <figcaption>One empty square separates same-color runs</figcaption>
+            <figcaption data-i18n="ui.howToStep2Figcaption">One empty square separates same-color runs</figcaption>
           </figure>
         </li>
         <li>
           <div class="step-copy">
-            <h2>Fill in the squares</h2>
-            <p>Pick a palette color, then tap or click a square. Use <strong>× Cross</strong> to mark an empty square; switch back to <strong>● Fill</strong> to color.</p>
+            <h2 data-i18n="ui.howToStep3Title">Fill in the squares</h2>
+            <p data-i18n-html="ui.howToStep3Desc">Pick a palette color, then tap or click a square. Use <strong>× Cross</strong> to mark an empty square; switch back to <strong>● Fill</strong> to color.</p>
           </div>
           <figure class="how-to-visual controls-visual">
             <div class="demo-palette" aria-hidden="true">
-              <span class="demo-label">COLOR</span>
+              <span class="demo-label" data-i18n="ui.howToColorLabel">COLOR</span>
               <span class="demo-swatch blue-run"></span>
               <span class="demo-swatch coral-run selected"></span>
               <span class="demo-swatch gold-run"></span>
-              <span class="demo-selected">Coral</span>
+              <span class="demo-selected" data-i18n="ui.howToDemoCoral">Coral</span>
             </div>
             <div class="demo-modes" aria-hidden="true">
-              <span class="demo-mode active">● Fill</span>
-              <span class="demo-mode">× Cross</span>
+              <span class="demo-mode active" data-i18n="ui.howToFill">● Fill</span>
+              <span class="demo-mode" data-i18n="ui.howToCross">× Cross</span>
             </div>
             <div class="demo-board" aria-hidden="true">
               <span></span><span></span><span class="target-cell"></span><span></span>
@@ -114,24 +115,24 @@
               <span></span><span class="blue-run"></span><span class="coral-run"></span><span></span>
               <span></span><span></span><span></span><span></span>
             </div>
-            <figcaption>Choose a color and fill a square</figcaption>
+            <figcaption data-i18n="ui.howToStep3Figcaption">Choose a color and fill a square</figcaption>
           </figure>
         </li>
         <li>
           <div class="step-copy">
-            <h2>Reveal the picture</h2>
-            <p>Fill the colored squares to finish the puzzle. Undo a move or use one of your three hints if you get stuck.</p>
+            <h2 data-i18n="ui.howToStep4Title">Reveal the picture</h2>
+            <p data-i18n="ui.howToStep4Desc">Fill the colored squares to finish the puzzle. Undo a move or use one of your three hints if you get stuck.</p>
           </div>
           <figure class="how-to-visual picture-visual">
             <svg class="heart-preview" viewBox="0 0 96 96" role="img" aria-labelledby="heart-preview-title">
-              <title id="heart-preview-title">A completed pixel heart puzzle</title>
+              <title id="heart-preview-title" data-i18n="ui.howToHeartTitle">A completed pixel heart puzzle</title>
               <rect width="96" height="96" rx="8" fill="#fffefe"/>
               <path d="M12 0h24v12H12zM60 0h24v12H60zM0 12h12v36H0zM84 12h12v36H84z" fill="#4a3338"/>
               <path d="M36 12h48v12H36zM12 24h72v24H12zM12 48h72v12H12zM24 60h48v12H24zM36 72h24v24H36z" fill="#de5260"/>
               <path d="M12 12h24v12H12z" fill="#f7d4dc"/>
               <path d="M12 0v96M24 0v96M36 0v96M48 0v96M60 0v96M72 0v96M84 0v96M0 12h96M0 24h96M0 36h96M0 48h96M0 60h96M0 72h96M0 84h96" stroke="#fffefe" stroke-width="1"/>
             </svg>
-            <figcaption>Every filled square reveals part of the picture</figcaption>
+            <figcaption data-i18n="ui.howToStep4Figcaption">Every filled square reveals part of the picture</figcaption>
           </figure>
         </li>
       </ol>
@@ -139,51 +140,54 @@
 
     <section class="feedback-screen" id="feedback-screen" aria-labelledby="feedback-title" hidden>
       <header class="topbar">
-        <button class="back-button" id="feedback-home-button" type="button">← Home</button>
+        <button class="back-button" id="feedback-home-button" type="button" data-i18n="ui.home">← Home</button>
         <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
+        <button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button>
       </header>
       <div class="feedback-body">
         <section class="welcome feedback-welcome">
-          <span class="welcome-kicker">Your thoughts help</span>
-          <h1 id="feedback-title">How was your game?</h1>
+          <span class="welcome-kicker" data-i18n="ui.feedbackKicker">Your thoughts help</span>
+          <h1 id="feedback-title" data-i18n="ui.feedbackTitle">How was your game?</h1>
         </section>
         <form class="feedback-form" id="feedback-form">
           <fieldset class="rating-fieldset">
-            <legend>Your rating</legend>
-            <div class="rating-options" role="radiogroup" aria-label="Your rating">
-              <label><input type="radio" name="rating" value="1" required><span>1</span><small>Not for me</small></label>
-              <label><input type="radio" name="rating" value="2"><span>2</span><small>Could improve</small></label>
-              <label><input type="radio" name="rating" value="3"><span>3</span><small>It was okay</small></label>
-              <label><input type="radio" name="rating" value="4"><span>4</span><small>Enjoyed it</small></label>
-              <label><input type="radio" name="rating" value="5"><span>5</span><small>Loved it</small></label>
+            <legend data-i18n="ui.ratingLegend">Your rating</legend>
+            <div class="rating-options" role="radiogroup" aria-label="Your rating" data-i18n-attr="aria-label:ui.ratingLegend">
+              <label><input type="radio" name="rating" value="1" required><span>1</span><small data-i18n="ui.rating1">Not for me</small></label>
+              <label><input type="radio" name="rating" value="2"><span>2</span><small data-i18n="ui.rating2">Could improve</small></label>
+              <label><input type="radio" name="rating" value="3"><span>3</span><small data-i18n="ui.rating3">It was okay</small></label>
+              <label><input type="radio" name="rating" value="4"><span>4</span><small data-i18n="ui.rating4">Enjoyed it</small></label>
+              <label><input type="radio" name="rating" value="5"><span>5</span><small data-i18n="ui.rating5">Loved it</small></label>
             </div>
           </fieldset>
-          <label class="feedback-label" for="feedback-message">Your review</label>
-          <textarea id="feedback-message" name="message" rows="5" maxlength="2000" placeholder="What did you think of Bettergram?" required></textarea>
-          <p class="feedback-status" id="feedback-status" aria-live="polite">Your review will be sent with your rating.</p>
+          <label class="feedback-label" for="feedback-message" data-i18n="ui.feedbackReview">Your review</label>
+          <textarea id="feedback-message" name="message" rows="5" maxlength="2000" placeholder="What did you think of Bettergram?" data-i18n-attr="placeholder:ui.feedbackPlaceholder" required></textarea>
+          <p class="feedback-status" id="feedback-status" aria-live="polite" data-i18n="ui.feedbackStatus">Your review will be sent with your rating.</p>
         </form>
       </div>
       <footer class="feedback-footer">
-        <button class="start-button primary feedback-submit" form="feedback-form" type="submit">Send review</button>
+        <button class="start-button primary feedback-submit" form="feedback-form" type="submit" data-i18n="ui.feedbackSubmit">Send review</button>
       </footer>
     </section>
 
     <section class="level-screen" id="level-screen" aria-labelledby="welcome-title" hidden>
       <header class="topbar">
-        <button class="back-button" id="start-menu-button" type="button">← Home</button>
+        <button class="back-button" id="start-menu-button" type="button" data-i18n="ui.home">← Home</button>
         <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
+        <button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button>
       </header>
       <section class="welcome">
-        <span class="welcome-kicker">A little color puzzle</span>
-        <h1 id="welcome-title">Choose your picture</h1>
+        <span class="welcome-kicker" data-i18n="ui.startKicker">A little color puzzle</span>
+        <h1 id="welcome-title" data-i18n="ui.levelsTitle">Choose your picture</h1>
       </section>
-      <nav class="level-gallery" id="level-gallery" aria-label="Choose a level"></nav>
+      <nav class="level-gallery" id="level-gallery" aria-label="Choose a level" data-i18n-attr="aria-label:ui.levelsGalleryAria"></nav>
     </section>
 
     <section class="game-screen" id="game-screen" hidden>
       <header class="topbar game-topbar">
-        <button class="back-button" id="level-menu-button" type="button">← All pictures</button>
+        <button class="back-button" id="level-menu-button" type="button" data-i18n="ui.allPictures">← All pictures</button>
         <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
+        <button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button>
       </header>
 
       <section class="heading" aria-live="polite">
@@ -196,30 +200,30 @@
         </div>
       </section>
 
-      <section class="puzzle-key" id="puzzle-key" aria-label="Puzzle information">
+      <section class="puzzle-key" id="puzzle-key" aria-label="Puzzle information" data-i18n-attr="aria-label:ui.puzzleInfoAria">
         <span class="puzzle-size" id="puzzle-size"></span>
-        <div class="color-legend" id="color-legend" aria-label="Puzzle colors"></div>
+        <div class="color-legend" id="color-legend" aria-label="Puzzle colors" data-i18n-attr="aria-label:ui.puzzleColorsAria"></div>
       </section>
 
-      <section class="game-area" aria-label="Nonogram puzzle">
+      <section class="game-area" aria-label="Nonogram puzzle" data-i18n-attr="aria-label:ui.nonogramAria">
         <div class="board-shell" id="board-shell">
           <div class="board-layout" id="board-layout">
             <div class="corner" aria-hidden="true"></div>
-            <div class="column-clues" id="column-clues" aria-label="Column clues"></div>
-            <div class="row-clues" id="row-clues" aria-label="Row clues"></div>
-            <div class="board" id="board" role="grid" aria-label="Puzzle cells"></div>
+            <div class="column-clues" id="column-clues" aria-label="Column clues" data-i18n-attr="aria-label:ui.columnCluesAria"></div>
+            <div class="row-clues" id="row-clues" aria-label="Row clues" data-i18n-attr="aria-label:ui.rowCluesAria"></div>
+            <div class="board" id="board" role="grid" aria-label="Puzzle cells" data-i18n-attr="aria-label:ui.puzzleCellsAria"></div>
           </div>
         </div>
       </section>
 
-      <section class="controls" aria-label="Game controls">
-        <div class="palette-row" id="palette" aria-label="Choose fill color"></div>
+      <section class="controls" aria-label="Game controls" data-i18n-attr="aria-label:ui.controlsAria">
+        <div class="palette-row" id="palette" aria-label="Choose fill color" data-i18n-attr="aria-label:ui.paletteAria"></div>
         <div class="action-row">
-          <button class="tool-button mode" id="mode-button" type="button" aria-pressed="false">● Fill</button>
-          <button class="tool-button" id="undo-button" type="button">↶ Undo</button>
+          <button class="tool-button mode" id="mode-button" type="button" aria-pressed="false" data-i18n="ui.modeFill">● Fill</button>
+          <button class="tool-button" id="undo-button" type="button" data-i18n="ui.undo">↶ Undo</button>
           <button class="tool-button hint" id="hint-button" type="button">✦ Hint (3/3)</button>
         </div>
-        <p class="help">Different colors can touch · same colors need a gap</p>
+        <p class="help" data-i18n="ui.gameHelp">Different colors can touch · same colors need a gap</p>
       </section>
     </section>
   </main>
@@ -227,17 +231,30 @@
   <div class="modal-backdrop" id="win-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="win-title">
     <div class="modal">
       <div class="modal-emoji" aria-hidden="true">✨</div>
-      <h2 id="win-title">Lovely work!</h2>
-      <p id="win-copy">You found the picture.</p>
-      <div class="painting-preview" id="painting-preview" role="img" aria-label="Your finished painting"></div>
+      <h2 id="win-title" data-i18n="ui.winTitle">Lovely work!</h2>
+      <p id="win-copy" data-i18n="ui.winCopyNext">You found the picture.</p>
+      <div class="painting-preview" id="painting-preview" role="img" aria-label="Your finished painting" data-i18n-attr="aria-label:ui.paintingPreviewAria"></div>
       <div class="result-actions">
-        <button class="view-button" id="view-painting-button" type="button">See painting</button>
-        <button class="next-button" id="next-button" type="button">Next Level</button>
+        <button class="view-button" id="view-painting-button" type="button" data-i18n="ui.seePainting">See painting</button>
+        <button class="next-button" id="next-button" type="button" data-i18n="ui.nextLevel">Next Level</button>
       </div>
     </div>
   </div>
 
+  <div class="language-backdrop" id="language-dialog" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="language-title" hidden>
+    <section class="language-modal">
+      <div class="modal-emoji" aria-hidden="true">♥</div>
+      <h2 id="language-title" data-i18n="ui.langDialogTitle">Choose your language</h2>
+      <p data-i18n="ui.langDialogDesc">You can change the language any time using the button at the top of the screen.</p>
+      <div class="language-options">
+        <button class="start-button primary" type="button" data-language-choice="en">English</button>
+        <button class="start-button" type="button" data-language-choice="uk">Українська</button>
+      </div>
+    </section>
+  </div>
+
   <script src="levels.js"></script>
+  <script src="translations.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
