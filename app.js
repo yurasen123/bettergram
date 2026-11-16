@@ -2,6 +2,64 @@
   "use strict";
 
   const levels = window.levels;
+  const translations = window.translations;
+  const languageStorageKey = "bettergram-language";
+  let language = "en";
+  let hasSavedLanguage = false;
+  try {
+    const savedLanguage = window.localStorage.getItem(languageStorageKey);
+    if (savedLanguage === "en" || savedLanguage === "uk") {
+      language = savedLanguage;
+      hasSavedLanguage = true;
+    }
+  } catch (error) {
+    console.error("Could not read the saved language.", error);
+  }
+
+  const pluralRules = {
+    en: new Intl.PluralRules("en-US"),
+    uk: new Intl.PluralRules("uk-UA")
+  };
+
+  const t = (path, params = {}) => {
+    const keys = path.split(".");
+    let current = translations?.[language];
+    for (const key of keys) {
+      if (current && current[key] !== undefined) {
+        current = current[key];
+      } else {
+        current = null;
+        break;
+      }
+    }
+    if (current === null || current === undefined) {
+      current = translations?.en;
+      for (const key of keys) {
+        if (current && current[key] !== undefined) {
+          current = current[key];
+        } else {
+          return path;
+        }
+      }
+    }
+    if (typeof current === "string" && params) {
+      return current.replace(/\{(\w+)\}/g, (_, k) => (params[k] !== undefined ? params[k] : `{${k}}`));
+    }
+    return current;
+  };
+
+  const plural = (categoryKey, count) => {
+    const pr = pluralRules[language] || pluralRules.en;
+    const rule = pr.select(count);
+    const forms = t(categoryKey);
+    const word = (forms && forms[rule]) || (forms && forms.other) || "";
+    return `${count} ${word}`;
+  };
+
+  const localizedLevelName = level => translations?.[language]?.levels?.[level.name] || translations?.en?.levels?.[level.name] || level.name;
+  const localizedColorName = color => translations?.[language]?.colors?.[color.name] || translations?.en?.colors?.[color.name] || color.name;
+  const pluralizeCells = count => plural("plural.cells", count);
+  const pluralizeMistakes = count => plural("plural.mistakes", count);
 
   const boards = levels.map(level => level.solution.map(row => row.map(() => 0)));
   const hintsLeft = levels.map(() => 3);
@@ -77,6 +135,74 @@
   const nextButton = document.getElementById("next-button");
   const viewPaintingButton = document.getElementById("view-painting-button");
   const paintingPreview = document.getElementById("painting-preview");
+  const languageDialog = document.getElementById("language-dialog");
+
+  function applyStaticTranslations() {
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+      element.textContent = t(element.dataset.i18n);
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach(element => {
+      element.innerHTML = t(element.dataset.i18nHtml);
+    });
+    document.querySelectorAll("[data-i18n-attr]").forEach(element => {
+      const mappings = element.dataset.i18nAttr.split(",");
+      for (const mapping of mappings) {
+        const [attr, key] = mapping.split(":");
+        if (attr && key) {
+          element.setAttribute(attr.trim(), t(key.trim()));
+        }
+      }
+    });
+  }
+
+  function applyLanguage() {
+    document.documentElement.lang = language;
+    document.title = t("meta.title");
+    const description = document.querySelector('meta[name="description"]');
+    if (description) {
+      description.content = t("meta.description");
+    }
+    applyStaticTranslations();
+    document.querySelectorAll("[data-language-toggle]").forEach(button => {
+      button.textContent = language === "uk" ? "English" : "Українська";
+      button.setAttribute(
+        "aria-label",
+        language === "uk" ? t("ui.switchToEn") : t("ui.switchToUk")
+      );
+    });
+    buildLevelGallery();
+    render();
+    if (!gameScreen.hidden) measureUIOverhead();
+  }
+
+  function saveLanguage() {
+    try {
+      window.localStorage.setItem(languageStorageKey, language);
+    } catch (error) {
+      console.error("Could not save the selected language.", error);
+    }
+  }
+
+  function chooseLanguage(nextLanguage) {
+    if (nextLanguage !== "en" && nextLanguage !== "uk") return;
+    language = nextLanguage;
+    saveLanguage();
+    applyLanguage();
+    languageDialog.hidden = true;
+    languageDialog.setAttribute("aria-hidden", "true");
+    playButton.focus();
+  }
+
+  document.querySelectorAll("[data-language-toggle]").forEach(button => {
+    button.addEventListener("click", () => {
+      language = language === "uk" ? "en" : "uk";
+      saveLanguage();
+      applyLanguage();
+    });
+  });
+  document.querySelectorAll("[data-language-choice]").forEach(button => {
+    button.addEventListener("click", () => chooseLanguage(button.dataset.languageChoice));
+  });
 
   const currentLevel = () => levels[levelIndex];
   const currentBoard = () => boards[levelIndex];
@@ -85,9 +211,11 @@
   const isCorrectCell = (row, col) =>
     currentLevel().solution[row][col] > 0 &&
     currentBoard()[row][col] === currentLevel().solution[row][col];
-  const isMistake = (row, col) =>
-    currentBoard()[row][col] > 0 &&
-    currentBoard()[row][col] !== currentLevel().solution[row][col];
+  const isMistake = (row, col) => {
+    const target = currentLevel().solution[row][col];
+    const value = currentBoard()[row][col];
+    return value > 0 ? value !== target : value === -1 && target > 0;
+  };
   const isColorComplete = colorIndex =>
     currentLevel().solution.every((row, r) =>
       row.every((target, c) => target !== colorIndex || currentBoard()[r][c] === colorIndex)
@@ -190,6 +318,7 @@
       // board-shell padding
       const shellStyle = getComputedStyle(boardShell);
       overhead += parseFloat(shellStyle.paddingTop) + parseFloat(shellStyle.paddingBottom);
+      overhead += columnClues.getBoundingClientRect().height;
       // height of each other element + its share of the gap
       let visibleSections = 0;
       sections.forEach(el => {
@@ -223,7 +352,14 @@
       button.className = "level-card";
       const locked = index > unlockedLevel;
       button.disabled = locked;
-      button.setAttribute("aria-label", `Level ${index + 1}: ${level.name}${level.hard ? ", hard level" : ""}${locked ? `, locked until level ${index} is complete` : ""}`);
+      const hard = level.hard ? t("game.hardSuffix") : "";
+      const lockedText = locked ? t("game.lockedSuffix", { prev: index }) : "";
+      button.setAttribute("aria-label", t("game.levelCardAria", {
+        num: index + 1,
+        name: localizedLevelName(level),
+        hard,
+        locked: lockedText
+      }));
       const preview = document.createElement("span");
       preview.className = "level-preview";
       preview.style.setProperty("--size", String(level.solution.length));
@@ -238,7 +374,7 @@
       number.textContent = String(index + 1).padStart(2, "0");
       const title = document.createElement("span");
       title.className = "card-title";
-      title.textContent = level.name;
+      title.textContent = localizedLevelName(level);
       button.append(preview, number, title);
       button.addEventListener("click", () => {
         if (index > unlockedLevel) return;
@@ -318,7 +454,7 @@
     clue.dataset.starting = String(starting);
     if (starting) {
       clue.classList.add("starting-clue");
-      clue.title = "Start here: this clue has only one possible placement.";
+      clue.title = t("ui.hintPlacement");
     }
     for (const run of pattern) {
       const item = document.createElement("span");
@@ -332,6 +468,23 @@
     return clue;
   }
 
+  function cellAriaLabel(row, col, value) {
+    const position = t("game.cellPosition", { row: row + 1, col: col + 1 });
+    if (value > 0) {
+      const state = isCorrectCell(row, col)
+        ? t("game.cellCorrectLocked")
+        : isMistake(row, col)
+          ? t("game.cellIncorrectColor")
+          : "";
+      return `${position}, ${localizedColorName(currentLevel().colors[value - 1])}${state}`;
+    }
+    if (value === -1) {
+      const incorrect = isMistake(row, col) ? t("game.cellIncorrect") : "";
+      return `${position}, ${t("game.cellCrossed")}${incorrect}`;
+    }
+    return `${position}, ${t("game.cellEmpty")}`;
+  }
+
   function render() {
     const level = currentLevel();
     const n = size();
@@ -340,25 +493,28 @@
     board.style.setProperty("--size", n);
     rowClues.style.setProperty("--size", n);
     columnClues.style.setProperty("--size", n);
-    levelTitle.textContent = level.name;
+    levelTitle.textContent = localizedLevelName(level);
     const filledCells = level.solution.flat().filter(value => value > 0).length;
-    puzzleSize.textContent = `${n} × ${n} · ${filledCells} cells`;
+    puzzleSize.textContent = `${n} × ${n} · ${pluralizeCells(filledCells)}`;
     colorLegend.innerHTML = "";
     level.colors.forEach((color, index) => {
       const count = level.solution.flat().filter(value => value === index + 1).length;
       const item = document.createElement("span");
       item.className = "legend-color";
-      item.setAttribute("aria-label", `${color.name}: ${count} cells`);
+      item.setAttribute("aria-label", `${localizedColorName(color)}: ${pluralizeCells(count)}`);
       const dot = document.createElement("span");
       dot.className = "legend-dot";
       dot.style.setProperty("--swatch", color.hex);
       dot.setAttribute("aria-hidden", "true");
       const label = document.createElement("span");
-      label.textContent = `${color.name} ${count}`;
+      label.textContent = `${localizedColorName(color)} ${count}`;
       item.append(dot, label);
       colorLegend.append(item);
     });
-    board.setAttribute("aria-label", `${n} by ${n} ${level.name} puzzle`);
+    board.setAttribute("aria-label", t("game.boardAria", {
+      size: n,
+      name: localizedLevelName(level)
+    }));
     board.innerHTML = "";
     rowClues.innerHTML = "";
     columnClues.innerHTML = "";
@@ -375,7 +531,7 @@
       cell.dataset.col = String(col);
       cell.setAttribute("role", "gridcell");
       const correct = isCorrectCell(row, col);
-      cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${value > 0 ? `, ${level.colors[value - 1].name}${correct ? ", correct and locked" : isMistake(row, col) ? ", incorrect color" : ""}` : value === -1 ? ", crossed" : ", empty"}`);
+      cell.setAttribute("aria-label", cellAriaLabel(row, col, value));
       if (col === 4 || (n === 10 && col === 4)) cell.classList.add("divider-right");
       if (row === 4 || (n === 10 && row === 4)) cell.classList.add("divider-bottom");
       if (correct) {
@@ -397,7 +553,9 @@
       button.type = "button";
       button.className = "swatch";
       button.style.setProperty("--swatch", color.hex);
-      button.setAttribute("aria-label", `Select ${color.name}`);
+      button.setAttribute("aria-label", t("game.selectColorAria", {
+        color: localizedColorName(color)
+      }));
       button.setAttribute("aria-pressed", String(selectedColor === index + 1 && !crossMode));
       button.addEventListener("click", () => {
         selectedColor = index + 1;
@@ -419,18 +577,22 @@
       const nextColor = currentLevel().colors.findIndex((_, index) => !isColorComplete(index + 1));
       if (nextColor >= 0) selectedColor = nextColor + 1;
     }
-    modeButton.textContent = crossMode ? "× Cross" : "● Fill";
+    modeButton.textContent = t(crossMode ? "ui.modeCross" : "ui.modeFill");
     modeButton.setAttribute("aria-pressed", String(crossMode));
     palette.querySelectorAll(".swatch").forEach((button, index) => {
       const complete = isColorComplete(index + 1);
       button.disabled = complete;
       button.classList.toggle("completed", complete);
-      button.setAttribute("aria-label", `${currentLevel().colors[index].name}${complete ? ", completed" : ""}`);
+      const completed = complete ? t("game.completedSuffix") : "";
+      button.setAttribute("aria-label", t("game.colorCompletedAria", {
+        color: localizedColorName(currentLevel().colors[index]),
+        completed
+      }));
       button.setAttribute("aria-pressed", String(selectedColor === index + 1 && !crossMode));
     });
     undoButton.disabled = undoStacks[levelIndex].length === 0;
     hintButton.disabled = hintsLeft[levelIndex] === 0 || won;
-    hintButton.textContent = `✦ Hint (${hintsLeft[levelIndex]}/3)`;
+    hintButton.textContent = `${t("ui.hint")} (${hintsLeft[levelIndex]}/3)`;
   }
 
   function updateClueCompletion() {
@@ -439,7 +601,7 @@
       const done = patternMatches(clue.dataset.axis, Number(clue.dataset.index));
       const starting = clue.dataset.starting === "true" && !done;
       clue.classList.toggle("starting-clue", starting);
-      clue.title = starting ? "Start here: this clue has only one possible placement." : "";
+      clue.title = starting ? t("ui.hintPlacement") : "";
       clue.querySelectorAll(".clue-run").forEach((run, runIndex) =>
         run.classList.toggle("done", completed.has(runIndex))
       );
@@ -459,7 +621,7 @@
           const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
           if (!cell) continue;
           cell.classList.add("crossed");
-          cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}, crossed`);
+          cell.setAttribute("aria-label", cellAriaLabel(row, col, -1));
         }
       }
     }
@@ -474,7 +636,7 @@
     }));
     const total = currentLevel().solution.flat().filter(value => value > 0).length;
     progress.textContent = `${filled} / ${total}`;
-    mistakes.textContent = `${incorrect} mistake${incorrect === 1 ? "" : "s"}`;
+    mistakes.textContent = pluralizeMistakes(incorrect);
   }
 
   function isSolved() {
@@ -499,7 +661,7 @@
     if (isCorrectCell(row, col)) return;
     const target = currentLevel().solution[row][col];
     if (current === action) {
-      if (action > 0 && action !== target) animateMistake(board.querySelector(`[data-row="${row}"][data-col="${col}"]`));
+      if (isMistake(row, col)) animateMistake(board.querySelector(`[data-row="${row}"][data-col="${col}"]`));
       return;
     }
     currentBoard()[row][col] = action;
@@ -520,8 +682,12 @@
     } else if (action === -1) {
       cell.classList.add("crossed");
       cell.removeAttribute("aria-disabled");
+      if (target > 0) {
+        cell.classList.add("mistake");
+        animateMistake(cell);
+      }
     }
-    cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${action > 0 ? `, ${currentLevel().colors[action - 1].name}${action === target ? ", correct and locked" : ", incorrect color"}` : action === -1 ? ", crossed" : ", empty"}`);
+    cell.setAttribute("aria-label", cellAriaLabel(row, col, action));
     autoCrossCompletedLines();
     updateClueCompletion();
     updateProgress();
@@ -533,13 +699,6 @@
         buildLevelGallery();
       }
 
-      function animateMistake(cell) {
-        if (!cell) return;
-        cell.classList.remove("mistake-shake");
-        void cell.offsetWidth;
-        cell.classList.add("mistake-shake");
-        cell.addEventListener("animationend", () => cell.classList.remove("mistake-shake"), { once: true });
-      }
       boardShell.classList.add("won");
       configureWinModal();
       window.clearTimeout(winModalTimer);
@@ -550,6 +709,14 @@
       }, 360);
     }
     updateControls();
+  }
+
+  function animateMistake(cell) {
+    if (!cell) return;
+    cell.classList.remove("mistake-shake");
+    void cell.offsetWidth;
+    cell.classList.add("mistake-shake");
+    cell.addEventListener("animationend", () => cell.classList.remove("mistake-shake"), { once: true });
   }
 
   function cellFromPoint(x, y) {
@@ -651,10 +818,8 @@
 
   function configureWinModal() {
     const hasNext = levelIndex < levels.length - 1;
-    winCopy.textContent = hasNext
-      ? "Your little picture is complete. Take a look, then keep going."
-      : "You uncovered every cozy little detail!";
-    nextButton.textContent = hasNext ? "Next Level" : "Play Again";
+    winCopy.textContent = t(hasNext ? "ui.winCopyNext" : "ui.winCopyAll");
+    nextButton.textContent = t(hasNext ? "ui.nextLevel" : "ui.playAgain");
     paintingPreview.style.setProperty("--size", size());
     paintingPreview.innerHTML = "";
     currentLevel().solution.forEach(row => row.forEach(value => {
@@ -673,7 +838,7 @@
   feedbackHomeButton.addEventListener("click", showStartScreen);
   feedbackForm.addEventListener("submit", event => {
     event.preventDefault();
-    feedbackStatus.textContent = "Feedback delivery is not configured yet.";
+    feedbackStatus.textContent = t("ui.feedbackNotConfigured");
   });
   playButton.addEventListener("click", () => showGameScreen());
 
@@ -729,7 +894,11 @@
     });
   }
 
-  buildLevelGallery();
   currentLevelNumber.textContent = String(levelIndex + 1);
-  render();
+  applyLanguage();
+  if (!hasSavedLanguage) {
+    languageDialog.hidden = false;
+    languageDialog.setAttribute("aria-hidden", "false");
+    languageDialog.querySelector("[data-language-choice]").focus();
+  }
 })();
