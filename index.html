@@ -9,8 +9,51 @@
 </head>
 <body>
   <main class="app">
-    <section class="level-screen" id="level-screen" aria-labelledby="welcome-title">
+    <section class="start-screen" id="start-screen" aria-labelledby="start-title">
+      <header class="topbar"><div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div></header>
+      <section class="welcome start-welcome">
+        <span class="welcome-kicker">A little color puzzle</span>
+        <h1 id="start-title">Make something lovely.</h1>
+        <p>Follow the clues, fill in the colors, and uncover a tiny picture one square at a time.</p>
+      </section>
+      <nav class="start-actions" aria-label="Main menu">
+        <button class="start-button primary" id="play-button" type="button">Play level <span id="current-level-number">1</span></button>
+        <button class="start-button" id="levels-button" type="button">Levels</button>
+        <button class="start-button" id="feedback-button" type="button">Feedback</button>
+      </nav>
+    </section>
+
+    <section class="feedback-screen" id="feedback-screen" aria-labelledby="feedback-title" hidden>
       <header class="topbar">
+        <button class="back-button" id="feedback-home-button" type="button">в†ђ Home</button>
+        <div class="brand"><span class="brand-heart" aria-hidden="true">в™Ґ</span> bettergram</div>
+      </header>
+      <section class="welcome feedback-welcome">
+        <span class="welcome-kicker">Your thoughts help</span>
+        <h1 id="feedback-title">How was your game?</h1>
+        <p>Tell us what you enjoyed or what could be better.</p>
+      </section>
+      <form class="feedback-form" id="feedback-form">
+        <fieldset class="rating-fieldset">
+          <legend>Your rating</legend>
+          <div class="rating-options" role="radiogroup" aria-label="Your rating">
+            <label><input type="radio" name="rating" value="1" required><span>1</span><small>Not for me</small></label>
+            <label><input type="radio" name="rating" value="2"><span>2</span><small>Could improve</small></label>
+            <label><input type="radio" name="rating" value="3"><span>3</span><small>It was okay</small></label>
+            <label><input type="radio" name="rating" value="4"><span>4</span><small>Enjoyed it</small></label>
+            <label><input type="radio" name="rating" value="5"><span>5</span><small>Loved it</small></label>
+          </div>
+        </fieldset>
+        <label class="feedback-label" for="feedback-message">Your review</label>
+        <textarea id="feedback-message" name="message" rows="5" maxlength="2000" placeholder="What did you think of Bettergram?" required></textarea>
+        <p class="feedback-status" id="feedback-status" aria-live="polite">Your review will be sent with your rating.</p>
+        <button class="start-button primary feedback-submit" type="submit">Send review</button>
+      </form>
+    </section>
+
+    <section class="level-screen" id="level-screen" aria-labelledby="welcome-title" hidden>
+      <header class="topbar">
+        <button class="back-button" id="start-menu-button" type="button">← Home</button>
         <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
       </header>
       <section class="welcome">
@@ -34,7 +77,6 @@
       <section class="heading" aria-live="polite">
         <div>
           <h1 id="level-title" tabindex="-1">A little love</h1>
-          <p class="subtitle" id="level-subtitle">A pink pixel heart, just for you.</p>
         </div>
         <div class="progress" id="progress">0 / 64</div>
       </section>
