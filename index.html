@@ -25,30 +25,33 @@
 
     <section class="feedback-screen" id="feedback-screen" aria-labelledby="feedback-title" hidden>
       <header class="topbar">
-        <button class="back-button" id="feedback-home-button" type="button">в†ђ Home</button>
-        <div class="brand"><span class="brand-heart" aria-hidden="true">в™Ґ</span> bettergram</div>
+        <button class="back-button" id="feedback-home-button" type="button">← Home</button>
+        <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
       </header>
-      <section class="welcome feedback-welcome">
-        <span class="welcome-kicker">Your thoughts help</span>
-        <h1 id="feedback-title">How was your game?</h1>
-        <p>Tell us what you enjoyed or what could be better.</p>
-      </section>
-      <form class="feedback-form" id="feedback-form">
-        <fieldset class="rating-fieldset">
-          <legend>Your rating</legend>
-          <div class="rating-options" role="radiogroup" aria-label="Your rating">
-            <label><input type="radio" name="rating" value="1" required><span>1</span><small>Not for me</small></label>
-            <label><input type="radio" name="rating" value="2"><span>2</span><small>Could improve</small></label>
-            <label><input type="radio" name="rating" value="3"><span>3</span><small>It was okay</small></label>
-            <label><input type="radio" name="rating" value="4"><span>4</span><small>Enjoyed it</small></label>
-            <label><input type="radio" name="rating" value="5"><span>5</span><small>Loved it</small></label>
-          </div>
-        </fieldset>
-        <label class="feedback-label" for="feedback-message">Your review</label>
-        <textarea id="feedback-message" name="message" rows="5" maxlength="2000" placeholder="What did you think of Bettergram?" required></textarea>
-        <p class="feedback-status" id="feedback-status" aria-live="polite">Your review will be sent with your rating.</p>
-        <button class="start-button primary feedback-submit" type="submit">Send review</button>
-      </form>
+      <div class="feedback-body">
+        <section class="welcome feedback-welcome">
+          <span class="welcome-kicker">Your thoughts help</span>
+          <h1 id="feedback-title">How was your game?</h1>
+        </section>
+        <form class="feedback-form" id="feedback-form">
+          <fieldset class="rating-fieldset">
+            <legend>Your rating</legend>
+            <div class="rating-options" role="radiogroup" aria-label="Your rating">
+              <label><input type="radio" name="rating" value="1" required><span>1</span><small>Not for me</small></label>
+              <label><input type="radio" name="rating" value="2"><span>2</span><small>Could improve</small></label>
+              <label><input type="radio" name="rating" value="3"><span>3</span><small>It was okay</small></label>
+              <label><input type="radio" name="rating" value="4"><span>4</span><small>Enjoyed it</small></label>
+              <label><input type="radio" name="rating" value="5"><span>5</span><small>Loved it</small></label>
+            </div>
+          </fieldset>
+          <label class="feedback-label" for="feedback-message">Your review</label>
+          <textarea id="feedback-message" name="message" rows="5" maxlength="2000" placeholder="What did you think of Bettergram?" required></textarea>
+          <p class="feedback-status" id="feedback-status" aria-live="polite">Your review will be sent with your rating.</p>
+        </form>
+      </div>
+      <footer class="feedback-footer">
+        <button class="start-button primary feedback-submit" form="feedback-form" type="submit">Send review</button>
+      </footer>
     </section>
 
     <section class="level-screen" id="level-screen" aria-labelledby="welcome-title" hidden>
@@ -58,12 +61,7 @@
       </header>
       <section class="welcome">
         <span class="welcome-kicker">A little color puzzle</span>
-        <h1 id="welcome-title">Make something lovely.</h1>
-        <p>Follow the clues, fill in the colors, and uncover a tiny picture one square at a time.</p>
-      </section>
-      <section class="gallery-heading">
-        <h2>Choose your picture</h2>
-        <p>Beat each picture to unlock the next one. You can replay any picture you have unlocked.</p>
+        <h1 id="welcome-title">Choose your picture</h1>
       </section>
       <nav class="level-gallery" id="level-gallery" aria-label="Choose a level"></nav>
     </section>
