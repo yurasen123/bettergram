@@ -142,12 +142,48 @@
     feedbackForm.querySelector("textarea").focus();
   }
 
+  function measureUIOverhead() {
+    // Measure the vertical space consumed by everything except the board shell,
+    // so the board-size CSS formula can cap the board to the remaining height.
+    requestAnimationFrame(() => {
+      const appEl = document.querySelector(".app");
+      const sections = [
+        document.querySelector(".game-topbar"),
+        document.querySelector(".heading"),
+        document.querySelector(".puzzle-key"),
+        document.querySelector(".controls"),
+      ];
+      let overhead = 0;
+      // app padding-top + padding-bottom
+      const appStyle = getComputedStyle(appEl);
+      overhead += parseFloat(appStyle.paddingTop) + parseFloat(appStyle.paddingBottom);
+      // gap between game-screen children: (count - 1) * gap
+      const gsStyle = getComputedStyle(gameScreen);
+      const gap = parseFloat(gsStyle.gap) || 0;
+      // board-shell padding
+      const shellStyle = getComputedStyle(boardShell);
+      overhead += parseFloat(shellStyle.paddingTop) + parseFloat(shellStyle.paddingBottom);
+      // height of each other element + its share of the gap
+      let visibleSections = 0;
+      sections.forEach(el => {
+        if (el) { overhead += el.getBoundingClientRect().height; visibleSections++; }
+      });
+      // gaps: (total children in game-screen - 1) * gap
+      const gameChildren = gameScreen.querySelectorAll(":scope > *:not([hidden])").length;
+      overhead += gap * Math.max(0, gameChildren - 1);
+      // add a small safety margin
+      overhead += 12;
+      appEl.style.setProperty("--ui-overhead", `${Math.round(overhead)}px`);
+    });
+  }
+
   function showGameScreen() {
     startScreen.hidden = true;
     feedbackScreen.hidden = true;
     levelScreen.hidden = true;
     gameScreen.hidden = false;
     render();
+    measureUIOverhead();
     levelTitle.focus();
   }
 
@@ -535,6 +571,11 @@
   nextButton.addEventListener("click", () => {
     selectLevel(levelIndex < levels.length - 1 ? levelIndex + 1 : 0);
     levelTitle.focus();
+  });
+
+  // Re-measure when the window resizes (orientation change, keyboard open, etc.)
+  window.addEventListener("resize", () => {
+    if (!gameScreen.hidden) measureUIOverhead();
   });
 
   buildLevelGallery();
