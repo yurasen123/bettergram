@@ -45,14 +45,18 @@
   const layout = document.getElementById("board-layout");
   const levelGallery = document.getElementById("level-gallery");
   const startScreen = document.getElementById("start-screen");
+  const howToScreen = document.getElementById("how-to-screen");
   const feedbackScreen = document.getElementById("feedback-screen");
   const levelScreen = document.getElementById("level-screen");
   const gameScreen = document.getElementById("game-screen");
   const levelMenuButton = document.getElementById("level-menu-button");
   const startMenuButton = document.getElementById("start-menu-button");
+  const howToHomeButton = document.getElementById("how-to-home-button");
   const playButton = document.getElementById("play-button");
   const levelsButton = document.getElementById("levels-button");
+  const howToPlayButton = document.getElementById("how-to-play-button");
   const feedbackButton = document.getElementById("feedback-button");
+  const installButton = document.getElementById("install-button");
   const feedbackHomeButton = document.getElementById("feedback-home-button");
   const feedbackForm = document.getElementById("feedback-form");
   const feedbackStatus = document.getElementById("feedback-status");
@@ -62,6 +66,7 @@
   const palette = document.getElementById("palette");
   const levelTitle = document.getElementById("level-title");
   const progress = document.getElementById("progress");
+  const mistakes = document.getElementById("mistakes");
   const puzzleSize = document.getElementById("puzzle-size");
   const colorLegend = document.getElementById("color-legend");
   const modeButton = document.getElementById("mode-button");
@@ -77,6 +82,16 @@
   const currentBoard = () => boards[levelIndex];
   const size = () => currentLevel().solution.length;
   const colorHex = value => value > 0 ? currentLevel().colors[value - 1].hex : "";
+  const isCorrectCell = (row, col) =>
+    currentLevel().solution[row][col] > 0 &&
+    currentBoard()[row][col] === currentLevel().solution[row][col];
+  const isMistake = (row, col) =>
+    currentBoard()[row][col] > 0 &&
+    currentBoard()[row][col] !== currentLevel().solution[row][col];
+  const isColorComplete = colorIndex =>
+    currentLevel().solution.every((row, r) =>
+      row.every((target, c) => target !== colorIndex || currentBoard()[r][c] === colorIndex)
+    );
 
   function saveLevel() {
     if (window.location.protocol === "file:") {
@@ -118,6 +133,7 @@
     modal.setAttribute("aria-hidden", "true");
     gameScreen.hidden = true;
     startScreen.hidden = true;
+    howToScreen.hidden = true;
     feedbackScreen.hidden = true;
     levelScreen.hidden = false;
     levelGallery.querySelectorAll(".level-card")[levelIndex]?.focus();
@@ -128,6 +144,7 @@
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
     gameScreen.hidden = true;
+    howToScreen.hidden = true;
     levelScreen.hidden = true;
     feedbackScreen.hidden = true;
     startScreen.hidden = false;
@@ -136,10 +153,20 @@
 
   function showFeedbackScreen() {
     startScreen.hidden = true;
+    howToScreen.hidden = true;
     levelScreen.hidden = true;
     gameScreen.hidden = true;
     feedbackScreen.hidden = false;
     feedbackForm.querySelector("textarea").focus();
+  }
+
+  function showHowToScreen() {
+    startScreen.hidden = true;
+    feedbackScreen.hidden = true;
+    levelScreen.hidden = true;
+    gameScreen.hidden = true;
+    howToScreen.hidden = false;
+    document.getElementById("how-to-title").focus();
   }
 
   function measureUIOverhead() {
@@ -179,6 +206,7 @@
 
   function showGameScreen() {
     startScreen.hidden = true;
+    howToScreen.hidden = true;
     feedbackScreen.hidden = true;
     levelScreen.hidden = true;
     gameScreen.hidden = false;
@@ -243,12 +271,6 @@
     return runs(axis === "row" ? solution[index] : solution.map(row => row[index]));
   }
 
-  function minimumClueLength(pattern) {
-    return pattern.reduce((length, run, index) =>
-      length + run.count + (index > 0 && pattern[index - 1].color === run.color ? 1 : 0), 0
-    );
-  }
-
   function patternMatches(axis, index) {
     const target = cluePattern(axis, index);
     const cells = axis === "row"
@@ -258,6 +280,32 @@
     return target.length === actual.length && target.every((run, i) =>
       run.count === actual[i].count && run.color === actual[i].color
     );
+  }
+
+  function minimumClueLength(pattern) {
+    return pattern.reduce((length, run, index) =>
+      length + run.count + (index > 0 && pattern[index - 1].color === run.color ? 1 : 0), 0
+    );
+  }
+
+  function completedClueRuns(axis, index) {
+    const target = cluePattern(axis, index);
+    const cells = axis === "row"
+      ? currentBoard()[index]
+      : currentBoard().map(row => row[index]);
+    const actual = runs(cells);
+    const completed = new Set();
+    let nextTarget = 0;
+    for (const run of actual) {
+      const match = target.findIndex((clue, clueIndex) =>
+        clueIndex >= nextTarget && clue.count === run.count && clue.color === run.color
+      );
+      if (match >= 0) {
+        completed.add(match);
+        nextTarget = match + 1;
+      }
+    }
+    return completed;
   }
 
   function makeClue(axis, index) {
@@ -326,9 +374,15 @@
       cell.dataset.row = String(row);
       cell.dataset.col = String(col);
       cell.setAttribute("role", "gridcell");
-      cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${value > 0 ? `, ${level.colors[value - 1].name}` : value === -1 ? ", crossed" : ", empty"}`);
+      const correct = isCorrectCell(row, col);
+      cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${value > 0 ? `, ${level.colors[value - 1].name}${correct ? ", correct and locked" : isMistake(row, col) ? ", incorrect color" : ""}` : value === -1 ? ", crossed" : ", empty"}`);
       if (col === 4 || (n === 10 && col === 4)) cell.classList.add("divider-right");
       if (row === 4 || (n === 10 && row === 4)) cell.classList.add("divider-bottom");
+      if (correct) {
+        cell.classList.add("locked");
+        cell.setAttribute("aria-disabled", "true");
+      }
+      if (isMistake(row, col)) cell.classList.add("mistake");
       if (value > 0) {
         cell.classList.add("filled");
         cell.style.setProperty("--fill", colorHex(value));
@@ -344,7 +398,7 @@
       button.className = "swatch";
       button.style.setProperty("--swatch", color.hex);
       button.setAttribute("aria-label", `Select ${color.name}`);
-      button.setAttribute("aria-pressed", String(selectedColor === index + 1));
+      button.setAttribute("aria-pressed", String(selectedColor === index + 1 && !crossMode));
       button.addEventListener("click", () => {
         selectedColor = index + 1;
         crossMode = false;
@@ -361,11 +415,19 @@
   }
 
   function updateControls() {
+    if (isColorComplete(selectedColor)) {
+      const nextColor = currentLevel().colors.findIndex((_, index) => !isColorComplete(index + 1));
+      if (nextColor >= 0) selectedColor = nextColor + 1;
+    }
     modeButton.textContent = crossMode ? "× Cross" : "● Fill";
     modeButton.setAttribute("aria-pressed", String(crossMode));
-    palette.querySelectorAll(".swatch").forEach((button, index) =>
-      button.setAttribute("aria-pressed", String(selectedColor === index + 1 && !crossMode))
-    );
+    palette.querySelectorAll(".swatch").forEach((button, index) => {
+      const complete = isColorComplete(index + 1);
+      button.disabled = complete;
+      button.classList.toggle("completed", complete);
+      button.setAttribute("aria-label", `${currentLevel().colors[index].name}${complete ? ", completed" : ""}`);
+      button.setAttribute("aria-pressed", String(selectedColor === index + 1 && !crossMode));
+    });
     undoButton.disabled = undoStacks[levelIndex].length === 0;
     hintButton.disabled = hintsLeft[levelIndex] === 0 || won;
     hintButton.textContent = `✦ Hint (${hintsLeft[levelIndex]}/3)`;
@@ -373,19 +435,46 @@
 
   function updateClueCompletion() {
     document.querySelectorAll(".row-clue, .column-clue").forEach(clue => {
+      const completed = completedClueRuns(clue.dataset.axis, Number(clue.dataset.index));
       const done = patternMatches(clue.dataset.axis, Number(clue.dataset.index));
       const starting = clue.dataset.starting === "true" && !done;
       clue.classList.toggle("starting-clue", starting);
       clue.title = starting ? "Start here: this clue has only one possible placement." : "";
-      clue.querySelectorAll(".clue-run").forEach(run => run.classList.toggle("done", done));
+      clue.querySelectorAll(".clue-run").forEach((run, runIndex) =>
+        run.classList.toggle("done", completed.has(runIndex))
+      );
     });
+  }
+
+  function autoCrossCompletedLines() {
+    const n = size();
+    for (const axis of ["row", "column"]) {
+      for (let index = 0; index < n; index++) {
+        if (!patternMatches(axis, index)) continue;
+        for (let offset = 0; offset < n; offset++) {
+          const row = axis === "row" ? index : offset;
+          const col = axis === "row" ? offset : index;
+          if (currentBoard()[row][col] !== 0) continue;
+          currentBoard()[row][col] = -1;
+          const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+          if (!cell) continue;
+          cell.classList.add("crossed");
+          cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}, crossed`);
+        }
+      }
+    }
   }
 
   function updateProgress() {
     let filled = 0;
-    currentBoard().forEach(row => row.forEach(value => { if (value > 0) filled++; }));
+    let incorrect = 0;
+    currentBoard().forEach((row, r) => row.forEach((value, c) => {
+      if (value > 0) filled++;
+      if (isMistake(r, c)) incorrect++;
+    }));
     const total = currentLevel().solution.flat().filter(value => value > 0).length;
     progress.textContent = `${filled} / ${total}`;
+    mistakes.textContent = `${incorrect} mistake${incorrect === 1 ? "" : "s"}`;
   }
 
   function isSolved() {
@@ -407,19 +496,33 @@
   function applyAction(row, col, action) {
     if (won || row < 0 || col < 0 || row >= size() || col >= size()) return;
     const current = currentBoard()[row][col];
-    if (current === action) return;
+    if (isCorrectCell(row, col)) return;
+    const target = currentLevel().solution[row][col];
+    if (current === action) {
+      if (action > 0 && action !== target) animateMistake(board.querySelector(`[data-row="${row}"][data-col="${col}"]`));
+      return;
+    }
     currentBoard()[row][col] = action;
     const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
     if (!cell) return;
-    cell.classList.remove("filled", "crossed", "hint-pulse");
+    cell.classList.remove("filled", "crossed", "hint-pulse", "mistake", "locked");
     cell.style.removeProperty("--fill");
     if (action > 0) {
       cell.classList.add("filled");
       cell.style.setProperty("--fill", colorHex(action));
+      if (action === target) {
+        cell.classList.add("locked");
+        cell.setAttribute("aria-disabled", "true");
+      } else {
+        cell.classList.add("mistake");
+        animateMistake(cell);
+      }
     } else if (action === -1) {
       cell.classList.add("crossed");
+      cell.removeAttribute("aria-disabled");
     }
-    cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${action > 0 ? `, ${currentLevel().colors[action - 1].name}` : action === -1 ? ", crossed" : ", empty"}`);
+    cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${action > 0 ? `, ${currentLevel().colors[action - 1].name}${action === target ? ", correct and locked" : ", incorrect color"}` : action === -1 ? ", crossed" : ", empty"}`);
+    autoCrossCompletedLines();
     updateClueCompletion();
     updateProgress();
     if (isSolved()) {
@@ -428,6 +531,14 @@
         unlockedLevel++;
         saveUnlockedLevel();
         buildLevelGallery();
+      }
+
+      function animateMistake(cell) {
+        if (!cell) return;
+        cell.classList.remove("mistake-shake");
+        void cell.offsetWidth;
+        cell.classList.add("mistake-shake");
+        cell.addEventListener("animationend", () => cell.classList.remove("mistake-shake"), { once: true });
       }
       boardShell.classList.add("won");
       configureWinModal();
@@ -510,7 +621,9 @@
   undoButton.addEventListener("click", () => {
     const previous = undoStacks[levelIndex].pop();
     if (!previous) return;
-    boards[levelIndex] = previous;
+    boards[levelIndex] = previous.map((row, r) => row.map((value, c) =>
+      isCorrectCell(r, c) ? currentBoard()[r][c] : value
+    ));
     render();
   });
 
@@ -553,7 +666,9 @@
 
   levelMenuButton.addEventListener("click", showLevelScreen);
   startMenuButton.addEventListener("click", showStartScreen);
+  howToHomeButton.addEventListener("click", showStartScreen);
   levelsButton.addEventListener("click", showLevelScreen);
+  howToPlayButton.addEventListener("click", showHowToScreen);
   feedbackButton.addEventListener("click", showFeedbackScreen);
   feedbackHomeButton.addEventListener("click", showStartScreen);
   feedbackForm.addEventListener("submit", event => {
@@ -577,6 +692,42 @@
   window.addEventListener("resize", () => {
     if (!gameScreen.hidden) measureUIOverhead();
   });
+
+  // PWA install prompt handler
+  let deferredInstallPrompt = null;
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    if (installButton) {
+      installButton.hidden = false;
+    }
+  });
+
+  if (installButton) {
+    installButton.addEventListener("click", async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice;
+      if (choice && choice.outcome === "accepted") {
+        installButton.hidden = true;
+      }
+      deferredInstallPrompt = null;
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    if (installButton) installButton.hidden = true;
+    deferredInstallPrompt = null;
+  });
+
+  // Register Service Worker for offline play
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(error => {
+        console.warn("ServiceWorker registration failed:", error);
+      });
+    });
+  }
 
   buildLevelGallery();
   currentLevelNumber.textContent = String(levelIndex + 1);
