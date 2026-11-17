@@ -254,6 +254,7 @@
     crossMode = false;
     saveLevel();
     render();
+    if (!gameScreen.hidden) measureUIOverhead();
   }
 
   function showLevelScreen() {
