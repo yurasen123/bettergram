@@ -1,4 +1,5 @@
-const CACHE_NAME = 'bettergram-v8';
+const CACHE_NAME = 'bettergram-v9';
+const PROGRESS_CACHE_NAME = 'bettergram-state-v1';
 const ASSETS_TO_CACHE = [
   './',
   './styles.css',
@@ -52,7 +53,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
+          if (key !== CACHE_NAME && key !== PROGRESS_CACHE_NAME) {
             return caches.delete(key);
           }
         })
@@ -66,6 +67,7 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   if (!url.protocol.startsWith('http')) return;
+  if (url.pathname.includes('__bettergram_state__')) return;
 
   event.respondWith(
     (async () => {

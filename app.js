@@ -66,9 +66,14 @@
   const undoStacks = levels.map(() => []);
   const levelCookie = "bettergram-level";
   const unlockedLevelCookie = "bettergram-unlocked-level";
+  const PROGRESS_CACHE_NAME = "bettergram-state-v1";
+  const PROGRESS_STORAGE_URL = window.location.protocol.startsWith("http")
+    ? new URL("__bettergram_state__", window.location.href).href
+    : null;
+
   const savedLevel = document.cookie.split("; ").find(cookie => cookie.startsWith(`${levelCookie}=`));
   let savedLevelValue = savedLevel ? savedLevel.slice(levelCookie.length + 1) : null;
-  if (!savedLevel && window.location.protocol === "file:") {
+  if (!savedLevelValue) {
     try {
       savedLevelValue = window.localStorage.getItem(levelCookie);
     } catch (error) {
@@ -79,7 +84,7 @@
   const hasSavedLevel = Number.isInteger(parsedSavedLevel) && parsedSavedLevel >= 0 && parsedSavedLevel < levels.length;
   const savedUnlockedLevel = document.cookie.split("; ").find(cookie => cookie.startsWith(`${unlockedLevelCookie}=`));
   let savedUnlockedLevelValue = savedUnlockedLevel ? savedUnlockedLevel.slice(unlockedLevelCookie.length + 1) : null;
-  if (!savedUnlockedLevel && window.location.protocol === "file:") {
+  if (!savedUnlockedLevelValue) {
     try {
       savedUnlockedLevelValue = window.localStorage.getItem(unlockedLevelCookie);
     } catch (error) {
@@ -176,11 +181,14 @@
     if (!gameScreen.hidden) measureUIOverhead();
   }
 
-  function saveLanguage() {
+  function saveLanguage(syncToCache = true) {
     try {
       window.localStorage.setItem(languageStorageKey, language);
     } catch (error) {
       console.error("Could not save the selected language.", error);
+    }
+    if (syncToCache) {
+      saveProgressToCache();
     }
   }
 
@@ -222,28 +230,106 @@
       row.every((target, c) => target !== colorIndex || currentBoard()[r][c] === colorIndex)
     );
 
-  function saveLevel() {
-    if (window.location.protocol === "file:") {
-      try {
-        window.localStorage.setItem(levelCookie, String(levelIndex));
-      } catch (error) {
-        console.error("Could not save the current level.", error);
-      }
-      return;
+  async function saveProgressToCache() {
+    if (!("caches" in window) || !PROGRESS_STORAGE_URL) return;
+    try {
+      const cache = await window.caches.open(PROGRESS_CACHE_NAME);
+      const payload = {
+        unlockedLevel,
+        levelIndex,
+        language,
+        timestamp: Date.now()
+      };
+      await cache.put(
+        PROGRESS_STORAGE_URL,
+        new Response(JSON.stringify(payload), {
+          headers: { "Content-Type": "application/json" }
+        })
+      );
+    } catch (error) {
+      console.warn("Could not save progress to cache storage.", error);
     }
-    document.cookie = `${levelCookie}=${levelIndex}; Max-Age=31536000; Path=/; SameSite=Lax`;
   }
 
-  function saveUnlockedLevel() {
-    if (window.location.protocol === "file:") {
-      try {
-        window.localStorage.setItem(unlockedLevelCookie, String(unlockedLevel));
-      } catch (error) {
-        console.error("Could not save unlocked levels.", error);
+  async function syncProgressFromCache() {
+    if (!("caches" in window) || !PROGRESS_STORAGE_URL) return;
+    try {
+      const cache = await window.caches.open(PROGRESS_CACHE_NAME);
+      const match = await cache.match(PROGRESS_STORAGE_URL);
+      if (!match) {
+        if (unlockedLevel > 0 || levelIndex > 0) {
+          await saveProgressToCache();
+        }
+        return;
       }
-      return;
+      const data = await match.json();
+      if (!data || typeof data !== "object") return;
+
+      let changed = false;
+      const cachedUnlocked = Number(data.unlockedLevel);
+      if (Number.isInteger(cachedUnlocked) && cachedUnlocked >= 0 && cachedUnlocked < levels.length) {
+        if (cachedUnlocked > unlockedLevel) {
+          unlockedLevel = cachedUnlocked;
+          saveUnlockedLevel(false);
+          changed = true;
+        } else if (unlockedLevel > cachedUnlocked) {
+          await saveProgressToCache();
+        }
+      }
+
+      const cachedLevel = Number(data.levelIndex);
+      if (Number.isInteger(cachedLevel) && cachedLevel >= 0 && cachedLevel <= unlockedLevel) {
+        if (levelIndex === 0 && cachedLevel > 0) {
+          levelIndex = cachedLevel;
+          saveLevel(false);
+          changed = true;
+        }
+      }
+
+      if (!hasSavedLanguage && (data.language === "en" || data.language === "uk")) {
+        language = data.language;
+        hasSavedLanguage = true;
+        saveLanguage(false);
+        applyLanguage();
+      }
+
+      if (changed) {
+        currentLevelNumber.textContent = String(levelIndex + 1);
+        buildLevelGallery();
+        render();
+        if (!gameScreen.hidden) measureUIOverhead();
+      }
+    } catch (error) {
+      console.warn("Could not sync progress from cache storage.", error);
     }
-    document.cookie = `${unlockedLevelCookie}=${unlockedLevel}; Max-Age=31536000; Path=/; SameSite=Lax`;
+  }
+
+  function saveLevel(syncToCache = true) {
+    try {
+      window.localStorage.setItem(levelCookie, String(levelIndex));
+    } catch (error) {
+      console.error("Could not save the current level.", error);
+    }
+    if (window.location.protocol !== "file:") {
+      document.cookie = `${levelCookie}=${levelIndex}; Max-Age=31536000; Path=/; SameSite=Lax`;
+    }
+    if (syncToCache) {
+      saveProgressToCache();
+    }
+  }
+
+  function saveUnlockedLevel(syncToCache = true) {
+    try {
+      window.localStorage.setItem(unlockedLevelCookie, String(unlockedLevel));
+    } catch (error) {
+      console.error("Could not save unlocked levels.", error);
+    }
+    if (window.location.protocol !== "file:") {
+      document.cookie = `${unlockedLevelCookie}=${unlockedLevel}; Max-Age=31536000; Path=/; SameSite=Lax`;
+    }
+    if (syncToCache) {
+      saveProgressToCache();
+    }
   }
 
   function selectLevel(index) {
@@ -920,4 +1006,14 @@
     languageDialog.setAttribute("aria-hidden", "false");
     languageDialog.querySelector("[data-language-choice]").focus();
   }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      syncProgressFromCache();
+    }
+  });
+  window.addEventListener("pageshow", () => {
+    syncProgressFromCache();
+  });
+  syncProgressFromCache();
 })();
