@@ -431,7 +431,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(var(--size), minmax(0, 1fr));
   align-items: end;
-  height: clamp(100px, 25vw, 140px);
+  min-height: clamp(100px, 25vw, 140px);
   padding-bottom: 6px;
 }
 .column-clue { display: flex; flex-direction: column; align-items: center; justify-content: end; gap: 2px; min-width: 0; }
@@ -523,6 +523,26 @@ h1 {
   50% { transform: translateX(3px); }
   75% { transform: translateX(-2px); }
 }
+.cell.correct-cross {
+  background: #e8f3e9;
+  color: #38764a;
+}
+.cell.correct-cross::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  width: clamp(9px, 42%, 14px);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 0 0 0 6px;
+  background: #38764a;
+  color: #fff;
+  content: "✓";
+  font-size: clamp(7px, 1.8vw, 10px);
+  font-weight: 900;
+  line-height: 1;
+}
 .cell.crossed::after {
   content: "\00D7";
   font-family: Arial, sans-serif;
@@ -571,7 +591,7 @@ h1 {
 .swatch[aria-pressed="true"]::after { opacity: .95; }
 .swatch.completed::after { content: "\00D7"; opacity: 1; font-size: 19px; text-shadow: 0 1px 3px rgb(0 0 0 / 65%); }
 .swatch:disabled { filter: grayscale(.25); cursor: default; }
-.action-row { gap: 7px; }
+.action-row { gap: 7px; flex-wrap: wrap; }
 .tool-button {
   min-width: 0;
   min-height: 40px;
@@ -862,7 +882,7 @@ h1 {
   .game-screen:not([hidden]) h1 { font-size: clamp(17px, 4.5vw, 22px); }
   .game-screen:not([hidden]) .puzzle-key { font-size: 9px; }
   .game-screen:not([hidden]) .board-shell { padding: 5px; border-radius: 11px; }
-  .game-screen:not([hidden]) .column-clues { height: clamp(68px, 18vh, 100px); }
+  .game-screen:not([hidden]) .column-clues { min-height: clamp(68px, 18vh, 100px); }
   .game-screen:not([hidden]) .controls { gap: 5px; padding: 6px 10px; border-radius: 11px; }
   .game-screen:not([hidden]) .swatch { width: 26px; height: 26px; }
   .game-screen:not([hidden]) .tool-button { min-height: 32px; }
@@ -873,7 +893,7 @@ h1 {
   .app:has(.game-screen:not([hidden])) { gap: 4px; }
   .game-screen:not([hidden]) { gap: 4px; }
   .game-screen:not([hidden]) .puzzle-key { display: none; }
-  .game-screen:not([hidden]) .column-clues { height: clamp(52px, 14vh, 76px); }
+  .game-screen:not([hidden]) .column-clues { min-height: clamp(52px, 14vh, 76px); }
   .game-screen:not([hidden]) .clue-run { min-width: 13px; height: 13px; font-size: 8px; }
   .game-screen:not([hidden]) .row-clue .clue-run { min-width: 8px; height: 12px; font-size: 7px; }
   .game-screen:not([hidden]) .swatch { width: 24px; height: 24px; }

@@ -129,6 +129,7 @@
   const colorLegend = document.getElementById("color-legend");
   const modeButton = document.getElementById("mode-button");
   const undoButton = document.getElementById("undo-button");
+  const restartButton = document.getElementById("restart-button");
   const hintButton = document.getElementById("hint-button");
   const modal = document.getElementById("win-modal");
   const winCopy = document.getElementById("win-copy");
@@ -211,6 +212,9 @@
   const isCorrectCell = (row, col) =>
     currentLevel().solution[row][col] > 0 &&
     currentBoard()[row][col] === currentLevel().solution[row][col];
+  const isCorrectCross = (row, col) =>
+    currentLevel().solution[row][col] === 0 &&
+    currentBoard()[row][col] === -1;
   const isMistake = (row, col) => {
     const target = currentLevel().solution[row][col];
     const value = currentBoard()[row][col];
@@ -479,8 +483,13 @@
       return `${position}, ${localizedColorName(currentLevel().colors[value - 1])}${state}`;
     }
     if (value === -1) {
-      const incorrect = isMistake(row, col) ? t("game.cellIncorrect") : "";
-      return `${position}, ${t("game.cellCrossed")}${incorrect}`;
+      if (isMistake(row, col)) {
+        return `${position}${t("game.cellCrossed")}${t("game.cellIncorrect")}`;
+      }
+      if (isCorrectCross(row, col)) {
+        return `${position}${t("game.cellCrossCorrect")}`;
+      }
+      return `${position}${t("game.cellCrossed")}`;
     }
     return `${position}, ${t("game.cellEmpty")}`;
   }
@@ -539,6 +548,7 @@
         cell.setAttribute("aria-disabled", "true");
       }
       if (isMistake(row, col)) cell.classList.add("mistake");
+      if (isCorrectCross(row, col)) cell.classList.add("correct-cross");
       if (value > 0) {
         cell.classList.add("filled");
         cell.style.setProperty("--fill", colorHex(value));
@@ -621,6 +631,7 @@
           const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
           if (!cell) continue;
           cell.classList.add("crossed");
+          cell.classList.add("correct-cross");
           cell.setAttribute("aria-label", cellAriaLabel(row, col, -1));
         }
       }
@@ -655,6 +666,21 @@
     undoStacks[levelIndex].push(snapshot());
   }
 
+  function restartLevel() {
+    window.clearTimeout(winModalTimer);
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    currentBoard().forEach(row => row.fill(0));
+    hintsLeft[levelIndex] = 3;
+    undoStacks[levelIndex] = [];
+    selectedColor = 1;
+    crossMode = false;
+    drag = null;
+    suppressClickUntil = 0;
+    won = false;
+    render();
+  }
+
   function applyAction(row, col, action) {
     if (won || row < 0 || col < 0 || row >= size() || col >= size()) return;
     const current = currentBoard()[row][col];
@@ -685,6 +711,8 @@
       if (target > 0) {
         cell.classList.add("mistake");
         animateMistake(cell);
+      } else {
+        cell.classList.add("correct-cross");
       }
     }
     cell.setAttribute("aria-label", cellAriaLabel(row, col, action));
@@ -793,6 +821,8 @@
     ));
     render();
   });
+
+  restartButton.addEventListener("click", restartLevel);
 
   hintButton.addEventListener("click", () => {
     if (hintsLeft[levelIndex] === 0 || won) return;
