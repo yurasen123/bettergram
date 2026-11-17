@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bettergram-v7';
+const CACHE_NAME = 'bettergram-v8';
 const ASSETS_TO_CACHE = [
   './',
   './styles.css',

@@ -523,26 +523,6 @@ h1 {
   50% { transform: translateX(3px); }
   75% { transform: translateX(-2px); }
 }
-.cell.correct-cross {
-  background: #e8f3e9;
-  color: #38764a;
-}
-.cell.correct-cross::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: grid;
-  width: clamp(9px, 42%, 14px);
-  aspect-ratio: 1;
-  place-items: center;
-  border-radius: 0 0 0 6px;
-  background: #38764a;
-  color: #fff;
-  content: "✓";
-  font-size: clamp(7px, 1.8vw, 10px);
-  font-weight: 900;
-  line-height: 1;
-}
 .cell.crossed::after {
   content: "\00D7";
   font-family: Arial, sans-serif;

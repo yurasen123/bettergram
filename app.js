@@ -212,9 +212,6 @@
   const isCorrectCell = (row, col) =>
     currentLevel().solution[row][col] > 0 &&
     currentBoard()[row][col] === currentLevel().solution[row][col];
-  const isCorrectCross = (row, col) =>
-    currentLevel().solution[row][col] === 0 &&
-    currentBoard()[row][col] === -1;
   const isMistake = (row, col) => {
     const target = currentLevel().solution[row][col];
     const value = currentBoard()[row][col];
@@ -483,13 +480,8 @@
       return `${position}, ${localizedColorName(currentLevel().colors[value - 1])}${state}`;
     }
     if (value === -1) {
-      if (isMistake(row, col)) {
-        return `${position}${t("game.cellCrossed")}${t("game.cellIncorrect")}`;
-      }
-      if (isCorrectCross(row, col)) {
-        return `${position}${t("game.cellCrossCorrect")}`;
-      }
-      return `${position}${t("game.cellCrossed")}`;
+      const incorrect = isMistake(row, col) ? t("game.cellIncorrect") : "";
+      return `${position}${t("game.cellCrossed")}${incorrect}`;
     }
     return `${position}, ${t("game.cellEmpty")}`;
   }
@@ -548,7 +540,6 @@
         cell.setAttribute("aria-disabled", "true");
       }
       if (isMistake(row, col)) cell.classList.add("mistake");
-      if (isCorrectCross(row, col)) cell.classList.add("correct-cross");
       if (value > 0) {
         cell.classList.add("filled");
         cell.style.setProperty("--fill", colorHex(value));
@@ -631,7 +622,6 @@
           const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
           if (!cell) continue;
           cell.classList.add("crossed");
-          cell.classList.add("correct-cross");
           cell.setAttribute("aria-label", cellAriaLabel(row, col, -1));
         }
       }
@@ -711,8 +701,6 @@
       if (target > 0) {
         cell.classList.add("mistake");
         animateMistake(cell);
-      } else {
-        cell.classList.add("correct-cross");
       }
     }
     cell.setAttribute("aria-label", cellAriaLabel(row, col, action));
