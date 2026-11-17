@@ -1,7 +1,6 @@
-const CACHE_NAME = 'bettergram-v4';
+const CACHE_NAME = 'bettergram-v7';
 const ASSETS_TO_CACHE = [
   './',
-  './index.html',
   './styles.css',
   './app.js',
   './levels.js',
@@ -14,9 +13,36 @@ const ASSETS_TO_CACHE = [
   './favicon.png'
 ];
 
+// Helper to remove WebKit's redirected flag.
+// Safari strictly forbids Service Workers from returning responses with `redirected: true`
+// for navigation requests, throwing: "Response served by service worker has redirections".
+async function cleanResponse(response) {
+  if (!response || !response.redirected) {
+    return response;
+  }
+  const body = await response.blob();
+  return new Response(body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers
+  });
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await cache.addAll(ASSETS_TO_CACHE);
+      // Pre-cache index.html using the clean root response to avoid Cloudflare Pages 308 redirect
+      const rootResponse = await cache.match('./');
+      if (rootResponse) {
+        const body = await rootResponse.blob();
+        await cache.put('./index.html', new Response(body, {
+          status: rootResponse.status,
+          statusText: rootResponse.statusText,
+          headers: rootResponse.headers
+        }));
+      }
+    })
   );
   self.skipWaiting();
 });
@@ -42,24 +68,54 @@ self.addEventListener('fetch', (event) => {
   if (!url.protocol.startsWith('http')) return;
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
+    (async () => {
+      // 1. Try cache match
+      let cachedResponse = await caches.match(event.request);
 
-      return cachedResponse || fetchPromise;
-    })
+      // If navigating to index.html or root and not matched directly
+      if (!cachedResponse && event.request.mode === 'navigate') {
+        cachedResponse = (await caches.match('./')) || (await caches.match('./index.html'));
+      }
+
+      if (cachedResponse) {
+        cachedResponse = await cleanResponse(cachedResponse);
+
+        // Stale-while-revalidate: update cache in background
+        event.waitUntil(
+          fetch(event.request)
+            .then(async (networkResponse) => {
+              if (networkResponse && networkResponse.status === 200) {
+                const cleaned = await cleanResponse(networkResponse);
+                const cache = await caches.open(CACHE_NAME);
+                await cache.put(event.request, cleaned);
+              }
+            })
+            .catch(() => {})
+        );
+
+        return cachedResponse;
+      }
+
+      // 2. Fetch from network
+      try {
+        const networkResponse = await fetch(event.request);
+        if (networkResponse && networkResponse.status === 200) {
+          const cleaned = await cleanResponse(networkResponse);
+          const responseToCache = cleaned.clone();
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(event.request, responseToCache);
+          return cleaned;
+        }
+        return await cleanResponse(networkResponse);
+      } catch (error) {
+        if (event.request.mode === 'navigate') {
+          const fallback = (await caches.match('./')) || (await caches.match('./index.html'));
+          if (fallback) {
+            return await cleanResponse(fallback);
+          }
+        }
+        throw error;
+      }
+    })()
   );
 });
