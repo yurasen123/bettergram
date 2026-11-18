@@ -16,7 +16,7 @@
   <meta name="apple-mobile-web-app-title" content="Bettergram">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <main class="app">
@@ -187,7 +187,13 @@
       <header class="topbar game-topbar">
         <button class="back-button" id="level-menu-button" type="button" data-i18n="ui.allPictures">← All pictures</button>
         <div class="brand"><span class="brand-heart" aria-hidden="true">♥</span> bettergram</div>
-        <button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button>
+        <div class="topbar-actions">
+          <button class="restart-top-button" id="restart-button" type="button" aria-label="Restart level" data-i18n-attr="aria-label:ui.restart,title:ui.restart" title="Restart">
+            <span class="restart-icon" aria-hidden="true">↻</span>
+            <span class="restart-label" data-i18n="ui.restart">↻ Restart</span>
+          </button>
+          <button class="language-button" type="button" data-language-toggle aria-label="Switch interface language">Українська</button>
+        </div>
       </header>
 
       <section class="heading" aria-live="polite">
@@ -221,7 +227,6 @@
         <div class="action-row">
           <button class="tool-button mode" id="mode-button" type="button" aria-pressed="false" data-i18n="ui.modeFill">● Fill</button>
           <button class="tool-button" id="undo-button" type="button" data-i18n="ui.undo">↶ Undo</button>
-          <button class="tool-button restart" id="restart-button" type="button" data-i18n="ui.restart">↻ Restart</button>
           <button class="tool-button hint" id="hint-button" type="button">✦ Hint (3/3)</button>
         </div>
         <p class="help" data-i18n="ui.gameHelp">Different colors can touch · same colors need a gap</p>
@@ -256,6 +261,6 @@
 
   <script src="levels.js"></script>
   <script src="translations.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
