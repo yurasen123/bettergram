@@ -217,9 +217,11 @@
   const currentBoard = () => boards[levelIndex];
   const size = () => currentLevel().solution.length;
   const colorHex = value => value > 0 ? currentLevel().colors[value - 1].hex : "";
-  const isCorrectCell = (row, col) =>
-    currentLevel().solution[row][col] > 0 &&
-    currentBoard()[row][col] === currentLevel().solution[row][col];
+  const isCorrectCell = (row, col) => {
+    const target = currentLevel().solution[row][col];
+    const value = currentBoard()[row][col];
+    return (target > 0 && value === target) || (target === 0 && value === -1);
+  };
   const isMistake = (row, col) => {
     const target = currentLevel().solution[row][col];
     const value = currentBoard()[row][col];
@@ -408,16 +410,25 @@
       overhead += parseFloat(shellStyle.paddingTop) + parseFloat(shellStyle.paddingBottom);
       overhead += columnClues.getBoundingClientRect().height;
       // height of each other element + its share of the gap
-      let visibleSections = 0;
       sections.forEach(el => {
-        if (el) { overhead += el.getBoundingClientRect().height; visibleSections++; }
+        if (el) { overhead += el.getBoundingClientRect().height; }
       });
       // gaps: (total children in game-screen - 1) * gap
       const gameChildren = gameScreen.querySelectorAll(":scope > *:not([hidden])").length;
       overhead += gap * Math.max(0, gameChildren - 1);
       // add a small safety margin
-      overhead += 12;
+      overhead += 10;
       appEl.style.setProperty("--ui-overhead", `${Math.round(overhead)}px`);
+
+      // Dynamically compute optimal square board size to maximize cell size
+      // while fitting both remaining viewport height and available shell width
+      const availHeight = Math.max(120, window.innerHeight - overhead);
+      const clueWidth = Math.ceil(rowClues.getBoundingClientRect().width) || 52;
+      const shellPadInline = parseFloat(shellStyle.paddingLeft) + parseFloat(shellStyle.paddingRight);
+      const availWidth = Math.max(120, boardShell.clientWidth - clueWidth - shellPadInline - 4);
+      const optimalBoard = Math.min(availWidth, availHeight, 520);
+      appEl.style.setProperty("--board-size", `${Math.round(optimalBoard)}px`);
+      appEl.style.setProperty("--clue-width", `${clueWidth}px`);
     });
   }
 
@@ -567,8 +578,12 @@
       return `${position}, ${localizedColorName(currentLevel().colors[value - 1])}${state}`;
     }
     if (value === -1) {
-      const incorrect = isMistake(row, col) ? t("game.cellIncorrect") : "";
-      return `${position}${t("game.cellCrossed")}${incorrect}`;
+      const state = isMistake(row, col)
+        ? t("game.cellIncorrect")
+        : isCorrectCell(row, col)
+          ? t("game.cellCorrectLocked")
+          : "";
+      return `${position}${t("game.cellCrossed")}${state}`;
     }
     return `${position}, ${t("game.cellEmpty")}`;
   }
@@ -608,6 +623,20 @@
     columnClues.innerHTML = "";
     palette.innerHTML = "";
     boardShell.classList.toggle("won", won);
+
+    let maxRowRuns = 1;
+    for (let r = 0; r < n; r++) {
+      const len = cluePattern("row", r).length;
+      if (len > maxRowRuns) maxRowRuns = len;
+    }
+    let maxColRuns = 1;
+    for (let c = 0; c < n; c++) {
+      const len = cluePattern("column", c).length;
+      if (len > maxColRuns) maxColRuns = len;
+    }
+    boardShell.classList.toggle("dense-clues", maxRowRuns >= 5 || maxColRuns >= 6);
+    boardShell.classList.toggle("extra-dense-clues", maxRowRuns >= 7 || maxColRuns >= 8);
+
     for (let col = 0; col < n; col++) columnClues.append(makeClue("column", col));
     for (let row = 0; row < n; row++) rowClues.append(makeClue("row", row));
 
@@ -625,6 +654,7 @@
       if (correct) {
         cell.classList.add("locked");
         cell.setAttribute("aria-disabled", "true");
+        cell.disabled = true;
       }
       if (isMistake(row, col)) cell.classList.add("mistake");
       if (value > 0) {
@@ -709,6 +739,11 @@
           const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
           if (!cell) continue;
           cell.classList.add("crossed");
+          if (currentLevel().solution[row][col] === 0) {
+            cell.classList.add("locked");
+            cell.setAttribute("aria-disabled", "true");
+            cell.disabled = true;
+          }
           cell.setAttribute("aria-label", cellAriaLabel(row, col, -1));
         }
       }
@@ -778,14 +813,22 @@
       if (action === target) {
         cell.classList.add("locked");
         cell.setAttribute("aria-disabled", "true");
+        cell.disabled = true;
       } else {
+        cell.removeAttribute("aria-disabled");
+        cell.disabled = false;
         cell.classList.add("mistake");
         animateMistake(cell);
       }
     } else if (action === -1) {
       cell.classList.add("crossed");
-      cell.removeAttribute("aria-disabled");
-      if (target > 0) {
+      if (target === 0) {
+        cell.classList.add("locked");
+        cell.setAttribute("aria-disabled", "true");
+        cell.disabled = true;
+      } else {
+        cell.removeAttribute("aria-disabled");
+        cell.disabled = false;
         cell.classList.add("mistake");
         animateMistake(cell);
       }
@@ -829,16 +872,22 @@
 
   function processDragCell(cell) {
     if (!drag || !cell || !board.contains(cell)) return;
-    const key = `${cell.dataset.row},${cell.dataset.col}`;
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+    if (isCorrectCell(r, c) || cell.classList.contains("locked") || cell.disabled) return;
+    const key = `${r},${c}`;
     if (drag.visited.has(key)) return;
     drag.visited.add(key);
-    applyAction(Number(cell.dataset.row), Number(cell.dataset.col), drag.action);
+    applyAction(r, c, drag.action);
   }
 
   board.addEventListener("mousedown", event => {
     if (event.button !== 0) return;
     const cell = event.target.closest(".cell");
     if (!cell) return;
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+    if (isCorrectCell(r, c) || cell.classList.contains("locked") || cell.disabled) return;
     event.preventDefault();
     saveUndo();
     drag = { action: crossMode ? -1 : selectedColor, visited: new Set() };
@@ -859,6 +908,9 @@
     const touch = event.changedTouches[0];
     const cell = cellFromPoint(touch.clientX, touch.clientY);
     if (!cell || !board.contains(cell)) return;
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+    if (isCorrectCell(r, c) || cell.classList.contains("locked") || cell.disabled) return;
     event.preventDefault();
     saveUndo();
     drag = { action: crossMode ? -1 : selectedColor, visited: new Set() };
@@ -879,8 +931,11 @@
     if (Date.now() < suppressClickUntil) return;
     const cell = event.target.closest(".cell");
     if (!cell) return;
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+    if (isCorrectCell(r, c) || cell.classList.contains("locked") || cell.disabled) return;
     saveUndo();
-    applyAction(Number(cell.dataset.row), Number(cell.dataset.col), crossMode ? -1 : selectedColor);
+    applyAction(r, c, crossMode ? -1 : selectedColor);
   });
 
   modeButton.addEventListener("click", () => {

@@ -84,6 +84,37 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   white-space: nowrap;
   cursor: pointer;
 }
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.restart-top-button {
+  min-height: 34px;
+  min-width: 38px;
+  padding: 0 10px;
+  border: 1px solid #e8b3ae;
+  border-radius: 7px;
+  background: #fce9e7;
+  color: var(--accent-dark);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: border-color .15s, color .15s;
+}
+.restart-top-button:hover {
+  border-color: var(--accent-dark);
+  background: #f7d8d5;
+}
+.restart-top-button:active {
+  transform: scale(.95);
+}
+.restart-icon { display: none; font-size: 13px; line-height: 1; }
 .language-button {
   min-height: 34px;
   padding: 0 9px;
@@ -417,27 +448,46 @@ h1 {
   box-shadow: var(--shadow);
 }
 .board-layout {
-  --clue-width: clamp(80px, 22vw, 108px);
   display: grid;
-  grid-template-columns: var(--clue-width) minmax(0, 1fr);
-  grid-template-rows: auto auto;
+  grid-template-columns: auto minmax(0, var(--board-size, 1fr));
+  grid-template-rows: auto minmax(0, var(--board-size, 1fr));
   align-items: end;
-  width: 100%;
-  max-width: 540px;
+  justify-content: center;
+  width: max-content;
+  max-width: 100%;
   margin-inline: auto;
 }
-.corner { min-height: 1px; }
+.corner {
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 1px;
+}
 .column-clues {
+  grid-column: 2;
+  grid-row: 1;
   display: grid;
   grid-template-columns: repeat(var(--size), minmax(0, 1fr));
   align-items: end;
-  min-height: clamp(100px, 25vw, 140px);
   padding-bottom: 6px;
+  position: relative;
+  z-index: 2;
 }
 .column-clue { display: flex; flex-direction: column; align-items: center; justify-content: end; gap: 2px; min-width: 0; }
-.row-clues { display: grid; grid-template-rows: repeat(var(--size), minmax(0, 1fr)); height: 100%; padding-right: 7px; }
+.row-clues {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(var(--size), minmax(0, 1fr));
+  height: 100%;
+  padding-right: 6px;
+  padding-block: 3px;
+  gap: 2px;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
 .row-clue { display: flex; align-items: center; justify-content: flex-end; gap: 1px; min-width: 0; white-space: nowrap; }
-.row-clue .clue-run { min-width: 10px; height: 15px; padding: 0 1px; border-radius: 3px; font-size: 9px; }
+.row-clue .clue-run { min-width: 11px; height: 15px; padding: 0 1.5px; border-radius: 3px; font-size: 9px; }
 
 .row-clue.starting-clue, .column-clue.starting-clue {
   border-radius: 5px;
@@ -463,7 +513,49 @@ h1 {
 }
 .clue-run.done { color: #8c918c; opacity: .43; text-decoration: line-through; text-decoration-thickness: 1.5px; }
 
+/* Dense clue sizing when puzzles have 5+ clue runs in a line */
+.board-shell.dense-clues .row-clue .clue-run {
+  min-width: 10px;
+  height: 14px;
+  padding: 0 1px;
+  border-radius: 3px;
+  font-size: 8.5px;
+}
+.board-shell.dense-clues .column-clue .clue-run {
+  min-width: 14px;
+  height: 14px;
+  font-size: 8.5px;
+  border-radius: 3px;
+}
+.board-shell.dense-clues .column-clue {
+  gap: 1.5px;
+}
+
+/* Extra-dense clue sizing when puzzles have 7+ clue runs in a line (e.g. Birthday cake) */
+.board-shell.extra-dense-clues .row-clue .clue-run {
+  min-width: 9px;
+  height: 13px;
+  padding: 0 0.5px;
+  border-radius: 2.5px;
+  font-size: 8px;
+}
+.board-shell.extra-dense-clues .column-clue .clue-run {
+  min-width: 13px;
+  height: 13px;
+  font-size: 8px;
+  border-radius: 2.5px;
+}
+.board-shell.extra-dense-clues .column-clue {
+  gap: 1px;
+}
+.board-shell.extra-dense-clues .row-clue {
+  gap: 1px;
+}
+
 .board {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
   display: grid;
   grid-template-columns: repeat(var(--size), minmax(0, 1fr));
   grid-template-rows:    repeat(var(--size), minmax(0, 1fr));
@@ -499,7 +591,7 @@ h1 {
 .cell.divider-bottom { box-shadow: inset 0 -2px #b8cad4; }
 .cell.divider-right.divider-bottom { box-shadow: inset -2px 0 #b8cad4, inset 0 -2px #b8cad4; }
 .cell.filled  { background: var(--fill); }
-.cell.locked { cursor: default; }
+.cell.locked { cursor: default; pointer-events: none; }
 .cell.mistake { outline: 2px solid #a92d32; outline-offset: -2px; }
 .cell.mistake::before {
   position: absolute;
@@ -539,6 +631,9 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
   padding: 10px 12px;
   border: 1px solid #d7e0e5;
   border-radius: 17px;
@@ -717,32 +812,24 @@ h1 {
   flex: 0 0 auto;
   padding: 8px;
   border-radius: 14px;
-  /* clue-width shrinks on narrow screens */
-  --clue-width: clamp(52px, 13vw, 90px);
-  /* board = whatever fits after the two clue columns, capped by free vertical space */
+  overflow: hidden;
+  /* board fallback size before JS measurement: available width after clues, capped by height */
   --board-size: min(
-    calc(100vw - 2 * clamp(10px, 3vw, 24px) - 2 * var(--clue-width) - 16px),
+    calc(100vw - 2 * clamp(8px, 2.5vw, 20px) - var(--clue-width, 60px) - 20px),
     calc(100svh - var(--ui-overhead, 320px)),
     520px
   );
 }
 
 .game-screen:not([hidden]) .board-layout {
-  --clue-width: inherit;
-  --board-size: inherit;
-  /* 3 columns: left-clues | board | right-mirror */
-  grid-template-columns: var(--clue-width) minmax(0, var(--board-size)) var(--clue-width);
+  display: grid;
+  grid-template-columns: auto minmax(0, var(--board-size));
+  grid-template-rows: auto minmax(0, var(--board-size));
   justify-content: center;
-  width: 100%;
-  max-width: none;
-  margin-inline: 0;
-}
-
-/* Invisible third column mirrors the left clue column so the board stays centered */
-.game-screen:not([hidden]) .board-layout::after {
-  content: "";
-  grid-column: 3;
-  grid-row: 1 / span 2;
+  align-items: end;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
 }
 
 /* Tighter board gap in game mode */
@@ -799,6 +886,13 @@ h1 {
   }
   .game-topbar .brand { font-size: 0; }
   .game-topbar .brand-heart { font-size: 16px; }
+  .restart-top-button {
+    min-height: 30px;
+    min-width: 30px;
+    padding: 0 6px;
+  }
+  .restart-label { display: none; }
+  .restart-icon { display: inline-block; }
 
   .game-screen:not([hidden]) .heading {
     padding: 4px 0 8px;
@@ -823,9 +917,8 @@ h1 {
   }
   .game-screen:not([hidden]) .legend-dot { width: 7px; height: 7px; }
 
-  /* Board: use narrower clue columns on phones */
+  /* Board: tighter shell padding on phones */
   .game-screen:not([hidden]) .board-shell {
-    --clue-width: clamp(44px, 12vw, 60px);
     padding: 6px 5px;
     border-radius: 12px;
   }
@@ -862,7 +955,6 @@ h1 {
   .game-screen:not([hidden]) h1 { font-size: clamp(17px, 4.5vw, 22px); }
   .game-screen:not([hidden]) .puzzle-key { font-size: 9px; }
   .game-screen:not([hidden]) .board-shell { padding: 5px; border-radius: 11px; }
-  .game-screen:not([hidden]) .column-clues { min-height: clamp(68px, 18vh, 100px); }
   .game-screen:not([hidden]) .controls { gap: 5px; padding: 6px 10px; border-radius: 11px; }
   .game-screen:not([hidden]) .swatch { width: 26px; height: 26px; }
   .game-screen:not([hidden]) .tool-button { min-height: 32px; }
@@ -873,8 +965,7 @@ h1 {
   .app:has(.game-screen:not([hidden])) { gap: 4px; }
   .game-screen:not([hidden]) { gap: 4px; }
   .game-screen:not([hidden]) .puzzle-key { display: none; }
-  .game-screen:not([hidden]) .column-clues { min-height: clamp(52px, 14vh, 76px); }
-  .game-screen:not([hidden]) .clue-run { min-width: 13px; height: 13px; font-size: 8px; }
+  .game-screen:not([hidden]) .clue-run { min-width: 12px; height: 12px; font-size: 7.5px; }
   .game-screen:not([hidden]) .row-clue .clue-run { min-width: 8px; height: 12px; font-size: 7px; }
   .game-screen:not([hidden]) .swatch { width: 24px; height: 24px; }
   .game-screen:not([hidden]) .tool-button { min-height: 28px; padding: 0 8px; }
@@ -884,14 +975,14 @@ h1 {
 @media (max-width: 350px) {
   .app { padding-inline: 8px; }
   .app:has(.game-screen:not([hidden])) { padding-inline: 6px; }
-  .game-screen:not([hidden]) .board-shell { --clue-width: clamp(38px, 11vw, 50px); padding: 4px; }
-  .clue-run { min-width: 13px; height: 13px; font-size: 8px; }
+  .game-screen:not([hidden]) .board-shell { padding: 4px; }
+  .clue-run { min-width: 12px; height: 12px; font-size: 7.5px; }
   .row-clue .clue-run { min-width: 8px; height: 12px; font-size: 7px; }
   .tool-button { padding-inline: 8px; }
 }
 
 /* ─── WIDE SCREEN: controls side-by-side ─────────────────────────────────── */
-@media (min-width: 580px) {
+@media (min-width: 680px) {
   .game-screen:not([hidden]) .controls {
     display: grid;
     grid-template-columns: auto auto;
@@ -902,7 +993,14 @@ h1 {
     flex-direction: unset;
   }
   .game-screen:not([hidden]) .palette-row { grid-row: span 2; }
-  .game-screen:not([hidden]) .action-row  { justify-content: flex-start; }
+  .game-screen:not([hidden]) .action-row {
+    min-width: 0;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+  .game-screen:not([hidden]) .action-row .tool-button {
+    flex-shrink: 1;
+  }
   .game-screen:not([hidden]) .help { grid-column: 2; text-align: left; }
 }
 
