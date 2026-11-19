@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160">
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="149" viewBox="0 0 280 160">
   <text x="0" y="14" fill="#71808a" font-family="system-ui, sans-serif" font-size="8" font-weight="700">COLOR</text>
   <circle cx="47" cy="11" r="8" fill="#5b91a1"/>
   <circle cx="69" cy="11" r="8" fill="#df786b" stroke="#37434b" stroke-width="2"/>

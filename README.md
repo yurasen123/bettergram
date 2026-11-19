@@ -1,14 +1,14 @@
 # Bettergram
 
-Bettergram is a cozy color nonogram puzzle game. Use the clues around each
+🇬🇧Bettergram is a cozy color nonogram puzzle game. Use the clues around each
 board to work out which squares to fill, then uncover a small pixel-art
 picture. The interface is available in English and Ukrainian.
 
-*Bettergram — затишна кольорова гра-нонограма. За підказками навколо поля
+🇺🇦*Bettergram — затишна кольорова гра-нонограма. За підказками навколо поля
 визначайте, які клітинки потрібно зафарбувати, щоб відкрити маленьке
 піксельне зображення. Інтерфейс доступний англійською та українською мовами.*
 
-![A pixel-art heart, like the pictures you can uncover in Bettergram](images/readme-heart.svg)
+![The pixel heart shown in Bettergram's how-to guide](images/readme-heart.svg)
 
 ## How to play / Як грати
 
@@ -26,7 +26,7 @@ means three blue squares followed by two coral squares.
 яким кольором їх зафарбувати. Наприклад, **3 сині, потім 2 коралові** —
 це три сині клітинки, за якими йдуть дві коралові.*
 
-![Three blue squares followed by two coral squares](images/readme-clues.svg)
+![The how-to example: clue 3 blue, then 2 coral, shown as five colored squares](images/readme-clues.svg)
 
 Runs of different colors may touch. Two runs of the same color must have at
 least one empty square between them.
@@ -34,7 +34,7 @@ least one empty square between them.
 *Відрізки різних кольорів можуть торкатися. Між двома відрізками одного
 кольору має бути щонайменше одна порожня клітинка.*
 
-![Different colors touching and a gap between matching colors](images/readme-spacing.svg)
+![The how-to examples: blue and coral runs touch; matching blue runs have a crossed empty square between them](images/readme-spacing.svg)
 
 Use the row and column clues together to work out where each run belongs. Fill
 the colored squares to complete the puzzle and reveal its picture.
@@ -51,13 +51,11 @@ to color it.
 *Виберіть колір на палітрі, увімкніть режим **Зафарбувати**, а потім
 клацніть або торкніться клітинки, щоб зафарбувати її.*
 
-![A color palette and a colored puzzle square](images/readme-fill.svg)
-
 Switch to **Cross** to mark a square as empty.
 
 *Увімкніть режим **Хрестик**, щоб позначити порожню клітинку.*
 
-![An empty square marked with a cross](images/readme-cross.svg)
+![The how-to example showing its color palette, Fill and Cross modes, and a 4 by 4 puzzle grid](images/readme-controls.svg)
 
 Use **Undo** to reverse a move, **Hint** if you get stuck, or **Restart** to
 start the current puzzle over. Each puzzle provides three hints.
