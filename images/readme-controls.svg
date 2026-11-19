@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160">
+  <text x="0" y="14" fill="#71808a" font-family="system-ui, sans-serif" font-size="8" font-weight="700">COLOR</text>
+  <circle cx="47" cy="11" r="8" fill="#5b91a1"/>
+  <circle cx="69" cy="11" r="8" fill="#df786b" stroke="#37434b" stroke-width="2"/>
+  <circle cx="91" cy="11" r="8" fill="#efbd62"/>
+  <text x="266" y="14" fill="#71808a" font-family="system-ui, sans-serif" font-size="9" text-anchor="end">Coral</text>
+  <rect x="0" y="26" width="55" height="19" rx="5" fill="#37434b"/>
+  <text x="27.5" y="39" fill="#fffefe" font-family="system-ui, sans-serif" font-size="9" font-weight="700" text-anchor="middle">● Fill</text>
+  <rect x="61" y="26" width="62" height="19" rx="5" fill="#fffefe" stroke="#d4dfe5"/>
+  <text x="92" y="39" fill="#71808a" font-family="system-ui, sans-serif" font-size="9" font-weight="700" text-anchor="middle">× Cross</text>
+  <rect x="88" y="49" width="104" height="104" rx="5" fill="#dce5e8" stroke="#d4dfe5"/>
+  <g fill="#fffefe">
+    <rect x="93" y="54" width="22" height="22"/>
+    <rect x="117" y="54" width="22" height="22"/>
+    <rect x="141" y="54" width="22" height="22"/>
+    <rect x="165" y="54" width="22" height="22"/>
+    <rect x="93" y="78" width="22" height="22"/>
+    <rect x="117" y="78" width="22" height="22"/>
+    <rect x="141" y="78" width="22" height="22"/>
+    <rect x="165" y="78" width="22" height="22"/>
+    <rect x="93" y="102" width="22" height="22"/>
+    <rect x="117" y="102" width="22" height="22"/>
+    <rect x="141" y="102" width="22" height="22"/>
+    <rect x="165" y="102" width="22" height="22"/>
+    <rect x="93" y="126" width="22" height="22"/>
+    <rect x="117" y="126" width="22" height="22"/>
+    <rect x="141" y="126" width="22" height="22"/>
+    <rect x="165" y="126" width="22" height="22"/>
+  </g>
+  <rect x="141" y="54" width="22" height="22" fill="none" stroke="#df786b" stroke-width="2" stroke-dasharray="3 2"/>
+  <rect x="117" y="78" width="22" height="22" fill="#df786b"/>
+  <rect x="141" y="78" width="22" height="22" fill="#df786b"/>
+  <rect x="117" y="102" width="22" height="22" fill="#5b91a1"/>
+  <rect x="141" y="102" width="22" height="22" fill="#df786b"/>
+</svg>
