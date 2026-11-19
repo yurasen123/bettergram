@@ -16,7 +16,7 @@
   <meta name="apple-mobile-web-app-title" content="Bettergram">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
   <main class="app">
@@ -30,6 +30,9 @@
       <nav class="start-actions" aria-label="Main menu" data-i18n-attr="aria-label:ui.mainMenu">
         <button class="start-button primary" id="play-button" type="button"><span data-i18n="ui.playLevel">Play level</span> <span id="current-level-number">1</span></button>
         <button class="start-button" id="levels-button" type="button" data-i18n="ui.levels">Levels</button>
+        <button class="start-button" id="transfer-progress-button" type="button" data-i18n="ui.transferProgress" disabled>Transfer progress to website</button>
+        <p class="progress-transfer-status" id="transfer-progress-status" aria-live="polite"></p>
+        <input class="progress-transfer-link" id="transfer-progress-link" type="url" readonly hidden aria-label="Progress transfer link" data-i18n-attr="aria-label:ui.progressLinkAria">
         <button class="start-button" id="how-to-play-button" type="button" data-i18n="ui.howToPlay">How to play</button>
         <button class="start-button" id="install-button" type="button" data-i18n="ui.installApp" hidden>Install app</button>
         <button class="start-button" id="feedback-button" type="button" data-i18n="ui.feedback">Feedback</button>
@@ -261,6 +264,6 @@
 
   <script src="levels.js"></script>
   <script src="translations.js"></script>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>
