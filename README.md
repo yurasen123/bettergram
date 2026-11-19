@@ -1,10 +1,10 @@
 # Bettergram
 
-🇬🇧Bettergram is a cozy color nonogram puzzle game. Use the clues around each
+🇬🇧 Bettergram is a cozy color nonogram puzzle game. Use the clues around each
 board to work out which squares to fill, then uncover a small pixel-art
 picture. The interface is available in English and Ukrainian.
 
-🇺🇦*Bettergram — затишна кольорова гра-нонограма. За підказками навколо поля
+🇺🇦 *Bettergram — затишна кольорова гра-нонограма. За підказками навколо поля
 визначайте, які клітинки потрібно зафарбувати, щоб відкрити маленьке
 піксельне зображення. Інтерфейс доступний англійською та українською мовами.*
 
