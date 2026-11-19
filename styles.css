@@ -16,8 +16,11 @@
 
 /* ─── RESET ──────────────────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
+html,
 body {
   min-width: 320px;
+}
+body {
   min-height: 100svh;
   margin: 0;
   background: var(--paper);
@@ -140,6 +143,18 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 }
 .start-welcome { padding-block: 10px; }
 .start-actions { display: grid; gap: 8px; }
+.progress-transfer-status { min-height: 0; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.progress-transfer-status:empty { display: none; }
+.progress-transfer-link {
+  width: 100%;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 11px/1.4 ui-monospace, monospace;
+}
 .start-button {
   min-height: 52px;
   padding: 0 18px;
@@ -314,6 +329,34 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .feedback-status { min-height: 1.3em; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .feedback-submit { width: 100%; text-align: center; }
 
+/* iOS PWA: lock the document while keeping scrollable content panes usable */
+.standalone-pwa,
+.standalone-pwa body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.standalone-pwa body {
+  position: fixed;
+  inset: 0;
+  min-height: 100%;
+  -webkit-overflow-scrolling: auto;
+}
+.standalone-pwa .app {
+  height: 100svh;
+  min-height: 100%;
+  overflow: hidden;
+}
+.standalone-pwa .start-screen,
+.standalone-pwa .level-screen,
+.standalone-pwa .how-to-screen {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* ─── WELCOME / HEADINGS ─────────────────────────────────────────────────── */
 .welcome { padding: 0; }
 .welcome-kicker {
@@ -478,6 +521,7 @@ h1 {
   grid-row: 2;
   display: grid;
   grid-template-rows: repeat(var(--size), minmax(0, 1fr));
+  width: max-content;
   height: 100%;
   padding-right: 6px;
   padding-block: 3px;
@@ -486,27 +530,27 @@ h1 {
   z-index: 2;
   box-sizing: border-box;
 }
-.row-clue { display: flex; align-items: center; justify-content: flex-end; gap: 1px; min-width: 0; white-space: nowrap; }
-.row-clue .clue-run { min-width: 11px; height: 15px; padding: 0 1.5px; border-radius: 3px; font-size: 9px; }
+.row-clue { display: flex; align-items: center; justify-content: flex-end; gap: 1px; width: max-content; min-width: 0; white-space: nowrap; }
+.row-clue .clue-run { flex: 0 0 auto; min-width: 13px; height: 17px; padding: 0 2px; border-radius: 3px; font-size: 11px; }
 
 .row-clue.starting-clue, .column-clue.starting-clue {
   border-radius: 5px;
   background: #fff1bd;
   box-shadow: inset 0 0 0 2px #76500f;
 }
-.row-clue.starting-clue { justify-self: end; width: max-content; max-width: 100%; }
+.row-clue.starting-clue { justify-self: end; width: max-content; }
 
 .clue-run {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 17px;
-  height: 17px;
+  min-width: 18px;
+  height: 18px;
   padding: 0 3px;
   border-radius: 5px;
   background: var(--clue-color, #bba);
   color: var(--clue-ink, var(--ink));
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 850;
   line-height: 1;
   transition: opacity .2s, color .2s, background-color .2s;
@@ -515,16 +559,16 @@ h1 {
 
 /* Dense clue sizing when puzzles have 5+ clue runs in a line */
 .board-shell.dense-clues .row-clue .clue-run {
-  min-width: 10px;
-  height: 14px;
-  padding: 0 1px;
+  min-width: 12px;
+  height: 15px;
+  padding: 0 1.5px;
   border-radius: 3px;
-  font-size: 8.5px;
+  font-size: 9.5px;
 }
 .board-shell.dense-clues .column-clue .clue-run {
-  min-width: 14px;
-  height: 14px;
-  font-size: 8.5px;
+  min-width: 15px;
+  height: 15px;
+  font-size: 9.5px;
   border-radius: 3px;
 }
 .board-shell.dense-clues .column-clue {
@@ -533,16 +577,16 @@ h1 {
 
 /* Extra-dense clue sizing when puzzles have 7+ clue runs in a line (e.g. Birthday cake) */
 .board-shell.extra-dense-clues .row-clue .clue-run {
-  min-width: 9px;
-  height: 13px;
-  padding: 0 0.5px;
+  min-width: 11px;
+  height: 14px;
+  padding: 0 1px;
   border-radius: 2.5px;
-  font-size: 8px;
+  font-size: 9px;
 }
 .board-shell.extra-dense-clues .column-clue .clue-run {
-  min-width: 13px;
-  height: 13px;
-  font-size: 8px;
+  min-width: 14px;
+  height: 14px;
+  font-size: 9px;
   border-radius: 2.5px;
 }
 .board-shell.extra-dense-clues .column-clue {
@@ -965,8 +1009,8 @@ h1 {
   .app:has(.game-screen:not([hidden])) { gap: 4px; }
   .game-screen:not([hidden]) { gap: 4px; }
   .game-screen:not([hidden]) .puzzle-key { display: none; }
-  .game-screen:not([hidden]) .clue-run { min-width: 12px; height: 12px; font-size: 7.5px; }
-  .game-screen:not([hidden]) .row-clue .clue-run { min-width: 8px; height: 12px; font-size: 7px; }
+  .game-screen:not([hidden]) .clue-run { min-width: 13px; height: 13px; font-size: 8.5px; }
+  .game-screen:not([hidden]) .row-clue .clue-run { min-width: 9px; height: 13px; font-size: 8px; }
   .game-screen:not([hidden]) .swatch { width: 24px; height: 24px; }
   .game-screen:not([hidden]) .tool-button { min-height: 28px; padding: 0 8px; }
 }
@@ -976,8 +1020,8 @@ h1 {
   .app { padding-inline: 8px; }
   .app:has(.game-screen:not([hidden])) { padding-inline: 6px; }
   .game-screen:not([hidden]) .board-shell { padding: 4px; }
-  .clue-run { min-width: 12px; height: 12px; font-size: 7.5px; }
-  .row-clue .clue-run { min-width: 8px; height: 12px; font-size: 7px; }
+  .clue-run { min-width: 13px; height: 13px; font-size: 8.5px; }
+  .row-clue .clue-run { min-width: 9px; height: 13px; font-size: 8px; }
   .tool-button { padding-inline: 8px; }
 }
 

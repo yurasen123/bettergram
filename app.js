@@ -1,6 +1,12 @@
 (() => {
   "use strict";
 
+  const isStandalonePwa = window.navigator.standalone === true
+    || window.matchMedia("(display-mode: standalone)").matches;
+  if (isStandalonePwa) {
+    document.documentElement.classList.add("standalone-pwa");
+  }
+
   const levels = window.levels;
   const translations = window.translations;
   const languageStorageKey = "bettergram-language";
@@ -66,36 +72,64 @@
   const undoStacks = levels.map(() => []);
   const levelCookie = "bettergram-level";
   const unlockedLevelCookie = "bettergram-unlocked-level";
+  const PROGRESS_TRANSFER_PARAM = "bettergram-progress";
   const PROGRESS_CACHE_NAME = "bettergram-state-v1";
   const PROGRESS_STORAGE_URL = window.location.protocol.startsWith("http")
     ? new URL("__bettergram_state__", window.location.href).href
     : null;
 
-  const savedLevel = document.cookie.split("; ").find(cookie => cookie.startsWith(`${levelCookie}=`));
-  let savedLevelValue = savedLevel ? savedLevel.slice(levelCookie.length + 1) : null;
-  if (!savedLevelValue) {
+  function readProgressValues(key) {
+    const cookie = document.cookie.split("; ").find(item => item.startsWith(`${key}=`));
+    const values = cookie ? [cookie.slice(key.length + 1)] : [];
     try {
-      savedLevelValue = window.localStorage.getItem(levelCookie);
+      const localValue = window.localStorage.getItem(key);
+      if (localValue !== null) values.push(localValue);
     } catch (error) {
-      console.error("Could not read the saved level.", error);
+      console.error(`Could not read saved progress for ${key}.`, error);
     }
+    return values.map(Number).filter(value =>
+      Number.isInteger(value) && value >= 0 && value < levels.length
+    );
   }
-  const parsedSavedLevel = savedLevelValue === null ? 0 : Number(savedLevelValue);
-  const hasSavedLevel = Number.isInteger(parsedSavedLevel) && parsedSavedLevel >= 0 && parsedSavedLevel < levels.length;
-  const savedUnlockedLevel = document.cookie.split("; ").find(cookie => cookie.startsWith(`${unlockedLevelCookie}=`));
-  let savedUnlockedLevelValue = savedUnlockedLevel ? savedUnlockedLevel.slice(unlockedLevelCookie.length + 1) : null;
-  if (!savedUnlockedLevelValue) {
+
+  function readProgressTransfer() {
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get(PROGRESS_TRANSFER_PARAM);
+    if (value === null) return null;
+
+    const [unlockedValue, levelValue, ...extra] = value.split(".");
+    const transferredUnlocked = Number(unlockedValue);
+    const transferredLevel = Number(levelValue);
+    const valid = extra.length === 0
+      && /^\d+$/.test(unlockedValue)
+      && /^\d+$/.test(levelValue)
+      && Number.isInteger(transferredUnlocked)
+      && transferredUnlocked >= 0
+      && transferredUnlocked < levels.length
+      && Number.isInteger(transferredLevel)
+      && transferredLevel >= 0
+      && transferredLevel <= transferredUnlocked;
+
+    params.delete(PROGRESS_TRANSFER_PARAM);
+    const cleanedUrl = new URL(window.location.href);
+    cleanedUrl.search = params.toString();
     try {
-      savedUnlockedLevelValue = window.localStorage.getItem(unlockedLevelCookie);
+      window.history.replaceState(window.history.state, "", cleanedUrl);
     } catch (error) {
-      console.error("Could not read unlocked levels.", error);
+      console.warn("Could not remove the progress transfer from the address.", error);
     }
+
+    return valid
+      ? { unlockedLevel: transferredUnlocked, levelIndex: transferredLevel }
+      : null;
   }
-  const parsedUnlockedLevel = savedUnlockedLevelValue === null ? 0 : Number(savedUnlockedLevelValue);
-  let unlockedLevel = Number.isInteger(parsedUnlockedLevel) && parsedUnlockedLevel >= 0 && parsedUnlockedLevel < levels.length
-    ? parsedUnlockedLevel
-    : 0;
-  let levelIndex = hasSavedLevel ? Math.min(parsedSavedLevel, unlockedLevel) : 0;
+
+  const transferredProgress = readProgressTransfer();
+  const savedUnlockedLevels = readProgressValues(unlockedLevelCookie);
+  let unlockedLevel = Math.max(0, ...savedUnlockedLevels, transferredProgress?.unlockedLevel || 0);
+  const savedLevels = readProgressValues(levelCookie)
+    .filter(value => value <= unlockedLevel);
+  let levelIndex = Math.max(0, ...savedLevels, transferredProgress?.levelIndex || 0);
   let selectedColor = 1;
   let crossMode = false;
   let drag = null;
@@ -119,6 +153,9 @@
   const levelsButton = document.getElementById("levels-button");
   const howToPlayButton = document.getElementById("how-to-play-button");
   const feedbackButton = document.getElementById("feedback-button");
+  const transferProgressButton = document.getElementById("transfer-progress-button");
+  const transferProgressStatus = document.getElementById("transfer-progress-status");
+  const transferProgressLink = document.getElementById("transfer-progress-link");
   const installButton = document.getElementById("install-button");
   const feedbackHomeButton = document.getElementById("feedback-home-button");
   const feedbackForm = document.getElementById("feedback-form");
@@ -268,24 +305,31 @@
       if (!data || typeof data !== "object") return;
 
       let changed = false;
+      let cacheNeedsUpdate = false;
       const cachedUnlocked = Number(data.unlockedLevel);
       if (Number.isInteger(cachedUnlocked) && cachedUnlocked >= 0 && cachedUnlocked < levels.length) {
         if (cachedUnlocked > unlockedLevel) {
           unlockedLevel = cachedUnlocked;
-          saveUnlockedLevel(false);
           changed = true;
         } else if (unlockedLevel > cachedUnlocked) {
-          await saveProgressToCache();
+          cacheNeedsUpdate = true;
         }
       }
 
       const cachedLevel = Number(data.levelIndex);
       if (Number.isInteger(cachedLevel) && cachedLevel >= 0 && cachedLevel <= unlockedLevel) {
-        if (levelIndex === 0 && cachedLevel > 0) {
+        if (cachedLevel > levelIndex) {
           levelIndex = cachedLevel;
-          saveLevel(false);
           changed = true;
+        } else if (levelIndex > cachedLevel) {
+          cacheNeedsUpdate = true;
         }
+      }
+
+      if (changed) {
+        saveUnlockedLevel(false);
+        saveLevel(false);
+        cacheNeedsUpdate = true;
       }
 
       if (!hasSavedLanguage && (data.language === "en" || data.language === "uk")) {
@@ -301,6 +345,7 @@
         render();
         if (!gameScreen.hidden) measureUIOverhead();
       }
+      if (cacheNeedsUpdate) await saveProgressToCache();
     } catch (error) {
       console.warn("Could not sync progress from cache storage.", error);
     }
@@ -331,6 +376,41 @@
     }
     if (syncToCache) {
       saveProgressToCache();
+    }
+  }
+
+  async function shareProgressToWebsite() {
+    const url = new URL(window.location.href);
+    url.searchParams.set(PROGRESS_TRANSFER_PARAM, `${unlockedLevel}.${levelIndex}`);
+    transferProgressLink.value = url.href;
+    transferProgressLink.hidden = false;
+
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: "Bettergram",
+          text: t("ui.progressShareText"),
+          url: url.href
+        });
+        transferProgressStatus.textContent = t("ui.progressShareReady");
+        return;
+      } catch (error) {
+        if (error && error.name === "AbortError") {
+          transferProgressStatus.textContent = t("ui.progressShareCancelled");
+          return;
+        }
+        console.warn("Could not share the progress link.", error);
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url.href);
+      transferProgressStatus.textContent = t("ui.progressLinkCopied");
+    } catch (error) {
+      console.warn("Could not copy the progress link.", error);
+      transferProgressLink.focus();
+      transferProgressLink.select();
+      transferProgressStatus.textContent = t("ui.progressCopyManual");
     }
   }
 
@@ -993,6 +1073,7 @@
   startMenuButton.addEventListener("click", showStartScreen);
   howToHomeButton.addEventListener("click", showStartScreen);
   levelsButton.addEventListener("click", showLevelScreen);
+  transferProgressButton.addEventListener("click", shareProgressToWebsite);
   howToPlayButton.addEventListener("click", showHowToScreen);
   feedbackButton.addEventListener("click", showFeedbackScreen);
   feedbackHomeButton.addEventListener("click", showStartScreen);
@@ -1056,6 +1137,11 @@
 
   currentLevelNumber.textContent = String(levelIndex + 1);
   applyLanguage();
+  saveLevel(false);
+  saveUnlockedLevel(false);
+  if (transferredProgress) {
+    transferProgressStatus.textContent = t("ui.progressImported", { level: unlockedLevel + 1 });
+  }
   if (!hasSavedLanguage) {
     languageDialog.hidden = false;
     languageDialog.setAttribute("aria-hidden", "false");
@@ -1070,5 +1156,7 @@
   window.addEventListener("pageshow", () => {
     syncProgressFromCache();
   });
-  syncProgressFromCache();
+  syncProgressFromCache().then(() => {
+    transferProgressButton.disabled = false;
+  });
 })();
