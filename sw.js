@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bettergram-v12';
+const CACHE_NAME = 'bettergram-v13';
 const PROGRESS_CACHE_NAME = 'bettergram-state-v1';
 const ASSETS_TO_CACHE = [
   './',
