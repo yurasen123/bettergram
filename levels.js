@@ -1398,5 +1398,473 @@ window.levels = [
       "444444444444",
       "044444444440"
     )
+  },
+    {
+    name: "Cute frog",
+    subtitle: "A cheerful green frog with rosy cheeks sits ready to hop.",
+    colors: [
+      { name: "Frog green", hex: "#6ca663", clueInk: "#fffaf8" },
+      { name: "Belly lime", hex: "#b8db8c", clueInk: "#2d471d" },
+      { name: "Eye cream", hex: "#f5f0e1", clueInk: "#4a463c" },
+      { name: "Pupil dark", hex: "#38363d", clueInk: "#fffaf8" },
+      { name: "Cheek blush", hex: "#ed9aa8", clueInk: "#5e2f38" }
+    ],
+    solution: picture(
+      "0011001100",
+      "0134113410",
+      "0111111110",
+      "1151111511",
+      "1114444111",
+      "0112222110",
+      "1122222211",
+      "1022222201",
+      "0112222110",
+      "1110000111"
+    )
+  },
+  {
+    name: "Pineapple",
+    subtitle: "A sweet golden pineapple topped with a spiky crown of green leaves.",
+    colors: [
+      { name: "Crown green", hex: "#568c58", clueInk: "#fffaf8" },
+      { name: "Leaf sage", hex: "#7eb36b", clueInk: "#244225" },
+      { name: "Golden rind", hex: "#efb94d", clueInk: "#594116" },
+      { name: "Sweet amber", hex: "#d68b3e", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000110000",
+      "0020110200",
+      "0022112200",
+      "0002112000",
+      "0003443000",
+      "0034334300",
+      "0043443400",
+      "0034334300",
+      "0043443400",
+      "0003443000"
+    )
+  },
+  {
+    name: "Cherries",
+    subtitle: "A pair of glossy red cherries hangs from joined stems and a fresh green leaf.",
+    colors: [
+      { name: "Stem green", hex: "#5a8a52", clueInk: "#fffaf8" },
+      { name: "Leaf mint", hex: "#7db068", clueInk: "#244020" },
+      { name: "Cherry ruby", hex: "#d44c5a", clueInk: "#fffaf8" },
+      { name: "Berry shine", hex: "#f5b5be", clueInk: "#632a32" }
+    ],
+    solution: picture(
+      "0000011220",
+      "0000101222",
+      "0001001020",
+      "0001000100",
+      "0010000100",
+      "0333003330",
+      "3433333433",
+      "3333333333",
+      "3333333333",
+      "0333003330"
+    )
+  },
+  {
+    name: "Love letter",
+    subtitle: "A cream envelope sealed with a ruby wax heart and tucked beside a sprig of lavender.",
+    colors: [
+      { name: "Paper cream", hex: "#f5ebd8", clueInk: "#544a39" },
+      { name: "Fold shadow", hex: "#d6c7b0", clueInk: "#473f32" },
+      { name: "Wax ruby", hex: "#d65865", clueInk: "#fffaf8" },
+      { name: "Lavender", hex: "#9d84b8", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000000040",
+      "0000000444",
+      "0000004440",
+      "1111111141",
+      "1211111121",
+      "1123333211",
+      "1113333111",
+      "1123333211",
+      "1211111121",
+      "1111111111"
+    )
+  },
+  {
+    name: "Hatching chick",
+    subtitle: "A fluffy yellow chick peeks out from a cracked cream eggshell.",
+    colors: [
+      { name: "Fluffy yellow", hex: "#f4cb58", clueInk: "#594414" },
+      { name: "Beak coral", hex: "#e37e49", clueInk: "#fffaf8" },
+      { name: "Eye ink", hex: "#3b3840", clueInk: "#fffaf8" },
+      { name: "Shell cream", hex: "#f5efe2", clueInk: "#4d483e" }
+    ],
+    solution: picture(
+      "0000110000",
+      "0001111000",
+      "0011111100",
+      "0013113100",
+      "0011221100",
+      "0411111140",
+      "0441441440",
+      "0444444440",
+      "0044444400",
+      "0004444000"
+    )
+  },
+  {
+    name: "Lemonade pitcher",
+    subtitle: "A glass pitcher filled with sunny lemonade, ice cubes, and a fresh mint sprig.",
+    colors: [
+      { name: "Glass aqua", hex: "#bfe0e3", clueInk: "#2f4b4d" },
+      { name: "Lemon gold", hex: "#f4ce58", clueInk: "#594514" },
+      { name: "Ice white", hex: "#f7f6f0", clueInk: "#4a4943" },
+      { name: "Mint leaf", hex: "#659960", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000044000",
+      "0011114000",
+      "0111111000",
+      "0133111110",
+      "0122221010",
+      "0123321010",
+      "0122221110",
+      "0122221000",
+      "0122221000",
+      "0011110000"
+    )
+  },
+  {
+    name: "Pocket compass",
+    subtitle: "An antique brass compass points due north with a red-and-slate needle.",
+    colors: [
+      { name: "Brass gold", hex: "#dba84c", clueInk: "#573e13" },
+      { name: "Dial cream", hex: "#f5edd8", clueInk: "#524938" },
+      { name: "North red", hex: "#d65b5b", clueInk: "#fffaf8" },
+      { name: "South slate", hex: "#4c5c6e", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000110000",
+      "0001221000",
+      "0012222100",
+      "0122332210",
+      "0122332210",
+      "0122442210",
+      "0122442210",
+      "0012222100",
+      "0001221000",
+      "0000110000"
+    )
+  },
+  {
+    name: "Blueberry pancakes",
+    subtitle: "A warm stack of pancakes drizzled with maple syrup and topped with butter and berries.",
+    colors: [
+      { name: "Pancake tan", hex: "#d9954e", clueInk: "#fffaf8" },
+      { name: "Syrup amber", hex: "#9e542c", clueInk: "#fffaf8" },
+      { name: "Butter gold", hex: "#f5d264", clueInk: "#594714" },
+      { name: "Berry indigo", hex: "#4d628a", clueInk: "#fffaf8" },
+      { name: "Plate cream", hex: "#ebe5d8", clueInk: "#4d483e" }
+    ],
+    solution: picture(
+      "0000440000",
+      "0003333000",
+      "0011221100",
+      "0112222110",
+      "0121111210",
+      "0111111110",
+      "0112111110",
+      "0111111110",
+      "5555555555",
+      "0555555550"
+    )
+  },
+  {
+    name: "Paper glider",
+    subtitle: "A folded paper airplane soars smoothly between two soft clouds.",
+    colors: [
+      { name: "Paper white", hex: "#f5f1e6", clueInk: "#4a473e" },
+      { name: "Crease gray", hex: "#c9c4b8", clueInk: "#42403a" },
+      { name: "Cloud mist", hex: "#dbe9ed", clueInk: "#35494f" },
+      { name: "Sky blue", hex: "#79adc4", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0330000011",
+      "3333000111",
+      "0000011121",
+      "0001111221",
+      "0111112210",
+      "0001222100",
+      "0001211000",
+      "0001000330",
+      "4000003333",
+      "4400000000"
+    )
+  },
+  {
+    name: "Sleepy koala",
+    subtitle: "A fluffy gray koala hugs a leafy eucalyptus branch.",
+    colors: [
+      { name: "Koala gray", hex: "#8b9299", clueInk: "#fffaf8" },
+      { name: "Ear fluff", hex: "#d8dcde", clueInk: "#42464a" },
+      { name: "Nose dark", hex: "#3d3b42", clueInk: "#fffaf8" },
+      { name: "Eucalyptus", hex: "#6c9c78", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0110000110",
+      "1221111221",
+      "1221111221",
+      "0111331110",
+      "0011331100",
+      "0011111140",
+      "0111111444",
+      "0111114440",
+      "0011114000",
+      "0011004000"
+    )
+  },
+  {
+    name: "Cheese & grapes",
+    subtitle: "A wedge of golden Swiss cheese sits beside a cluster of sweet purple grapes.",
+    colors: [
+      { name: "Swiss gold", hex: "#f2c557", clueInk: "#594314" },
+      { name: "Cheese hole", hex: "#d4953b", clueInk: "#fffaf8" },
+      { name: "Grape plum", hex: "#7d5a87", clueInk: "#fffaf8" },
+      { name: "Vine green", hex: "#65945c", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000004400",
+      "0000044000",
+      "0001133300",
+      "0011233330",
+      "0111133300",
+      "1121113300",
+      "1111211000",
+      "1111111000",
+      "1211121000",
+      "1111111000"
+    )
+  },
+  {
+    name: "Sea turtle",
+    subtitle: "A patterned green sea turtle glides through calm ocean waters.",
+    colors: [
+      { name: "Shell forest", hex: "#4f805d", clueInk: "#fffaf8" },
+      { name: "Shell lime", hex: "#8ab878", clueInk: "#27421d" },
+      { name: "Flipper sage", hex: "#6fa173", clueInk: "#fffaf8" },
+      { name: "Ocean blue", hex: "#669eb0", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "0000330000",
+      "0003333000",
+      "0301221030",
+      "3312112133",
+      "3311221133",
+      "0012112100",
+      "0011221100",
+      "0331111330",
+      "0300330030",
+      "4444444444"
+    )
+  },
+  {
+    name: "Potion bottle",
+    subtitle: "A corked glass flask swirls with shimmering lilac elixir and a golden star.",
+    hard: true,
+    colors: [
+      { name: "Glass aqua", hex: "#b5dce0", clueInk: "#2a4a4d" },
+      { name: "Cork wood", hex: "#b37b4d", clueInk: "#fffaf8" },
+      { name: "Elixir lilac", hex: "#9b72b0", clueInk: "#fffaf8" },
+      { name: "Shimmer pink", hex: "#e8a7c8", clueInk: "#5c2e46" },
+      { name: "Star gold", hex: "#f2c557", clueInk: "#594314" }
+    ],
+    solution: picture(
+      "000002200000",
+      "000002200000",
+      "000011110000",
+      "000001100000",
+      "000111111000",
+      "001133331100",
+      "011343333110",
+      "013443533310",
+      "013335553310",
+      "013333533310",
+      "001333333100",
+      "000111111000"
+    )
+  },
+  {
+    name: "Red panda",
+    subtitle: "A rust-red panda with cream face markings and a striped tail sits on bamboo.",
+    hard: true,
+    colors: [
+      { name: "Rust fur", hex: "#c96342", clueInk: "#fffaf8" },
+      { name: "Cream patch", hex: "#f5e6cc", clueInk: "#544631" },
+      { name: "Dark paw", hex: "#3d3334", clueInk: "#fffaf8" },
+      { name: "Bamboo green", hex: "#6a995e", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "002100001200",
+      "001111111100",
+      "012111111210",
+      "013122221310",
+      "001223322100",
+      "000112211000",
+      "001111111100",
+      "011311113110",
+      "011311113112",
+      "001111111121",
+      "003300003312",
+      "444444444444"
+    )
+  },
+  {
+    name: "Country windmill",
+    subtitle: "Four wooden sails cross over a warm brick windmill in a green meadow.",
+    hard: true,
+    colors: [
+      { name: "Sail cream", hex: "#f2e5ce", clueInk: "#544937" },
+      { name: "Sail wood", hex: "#8c5e42", clueInk: "#fffaf8" },
+      { name: "Brick coral", hex: "#c46b5a", clueInk: "#fffaf8" },
+      { name: "Meadow green", hex: "#67965c", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "010000000010",
+      "011000000110",
+      "001203302100",
+      "000223322000",
+      "000022220000",
+      "000223322000",
+      "001233332100",
+      "011033330110",
+      "010332233010",
+      "000332233000",
+      "003333333300",
+      "444444444444"
+    )
+  },
+  {
+    name: "Acoustic guitar",
+    subtitle: "A warm honey-and-cedar acoustic guitar with ivory binding.",
+    colors: [
+      { name: "Honey wood", hex: "#dfa055", clueInk: "#593d18" },
+      { name: "Cedar body", hex: "#b8713d", clueInk: "#fffaf8" },
+      { name: "Sound hole", hex: "#42322d", clueInk: "#fffaf8" },
+      { name: "Neck walnut", hex: "#734c3b", clueInk: "#fffaf8" },
+      { name: "Ivory trim", hex: "#f5ebd8", clueInk: "#544937" }
+    ],
+    solution: picture(
+      "000004400000",
+      "000054450000",
+      "000004400000",
+      "000004400000",
+      "000114411000",
+      "001153351100",
+      "000153351000",
+      "001115511100",
+      "011222222110",
+      "012225522210",
+      "011222222110",
+      "001111111100"
+    )
+  },
+  {
+    name: "Amethyst crystal",
+    subtitle: "Faceted violet quartz spires rise from a dark slate stone base.",
+    hard: true,
+    colors: [
+      { name: "Amethyst", hex: "#8b63a6", clueInk: "#fffaf8" },
+      { name: "Lilac facet", hex: "#c4a6d9", clueInk: "#443252" },
+      { name: "Crystal shine", hex: "#efe3f7", clueInk: "#4e3d59" },
+      { name: "Slate stone", hex: "#575b66", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000003100000",
+      "000032110000",
+      "000022110000",
+      "003122110310",
+      "032122113210",
+      "022122112210",
+      "022122112210",
+      "022122112210",
+      "004444444400",
+      "044444444440",
+      "444444444444",
+      "044444444440"
+    )
+  },
+  {
+    name: "Peacock feather",
+    subtitle: "An iridescent sapphire-and-gold eye shimmers inside emerald feather plumes.",
+    hard: true,
+    colors: [
+      { name: "Fringe emerald", hex: "#58946e", clueInk: "#fffaf8" },
+      { name: "Teal halo", hex: "#62a8ab", clueInk: "#fffaf8" },
+      { name: "Gold ring", hex: "#edc058", clueInk: "#594216" },
+      { name: "Sapphire eye", hex: "#3d598a", clueInk: "#fffaf8" },
+      { name: "Quill stem", hex: "#d9c89e", clueInk: "#4f4631" }
+    ],
+    solution: picture(
+      "000011110000",
+      "001122221100",
+      "011223322110",
+      "012234432210",
+      "112344443211",
+      "112344443211",
+      "012234432210",
+      "011223322110",
+      "001125521100",
+      "000115511000",
+      "000005500000",
+      "000005500000"
+    )
+  },
+  {
+    name: "Friendly bronto",
+    subtitle: "A gentle long-necked dinosaur strolls past a leafy prehistoric fern.",
+    colors: [
+      { name: "Dino sage", hex: "#71a375", clueInk: "#fffaf8" },
+      { name: "Spot mint", hex: "#a8d19b", clueInk: "#2b4723" },
+      { name: "Eye ink", hex: "#3b3a42", clueInk: "#fffaf8" },
+      { name: "Fern green", hex: "#4f7d55", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000000001110",
+      "000000011311",
+      "000000011110",
+      "000000011000",
+      "000000011000",
+      "001111111000",
+      "011211211000",
+      "111111111000",
+      "101111110000",
+      "001100110040",
+      "001100110444",
+      "444444444444"
+    )
+  },
+  {
+    name: "Pastel ferris wheel",
+    subtitle: "Colorful passenger cabins turn smoothly around a tall carnival wheel.",
+    hard: true,
+    colors: [
+      { name: "Wheel cream", hex: "#f2e5ce", clueInk: "#544937" },
+      { name: "Cabin coral", hex: "#e0756e", clueInk: "#fffaf8" },
+      { name: "Cabin sky", hex: "#6ea6bd", clueInk: "#fffaf8" },
+      { name: "Cabin gold", hex: "#f0c059", clueInk: "#594216" },
+      { name: "Stand slate", hex: "#576475", clueInk: "#fffaf8" }
+    ],
+    solution: picture(
+      "000002200000",
+      "000112211000",
+      "033101101440",
+      "033011110440",
+      "011115511110",
+      "010015510010",
+      "044011110330",
+      "044105501330",
+      "000152251000",
+      "000552255000",
+      "005500005500",
+      "555555555555"
+    )
   }
 ];
